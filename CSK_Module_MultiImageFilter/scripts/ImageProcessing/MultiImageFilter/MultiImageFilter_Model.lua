@@ -60,35 +60,39 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.parameters = {}
   self.parameters.registeredEvent = '' -- If thread internal function should react on external event, define it here, e.g. 'CSK_OtherModule.OnNewInput'
   self.parameters.processingFile = 'CSK_MultiImageFilter_Processing' -- which file to use for processing (will be started in own thread)
-  --self.parameters.showImage = true -- Short docu of variable
-  --self.parameters.paramA = 'paramA' -- Short docu of variable
-  --self.parameters.paramB = 123 -- Short docu of variable
+  self.parameters.filterType = 'Gray' -- Type of filter to use
 
-  self.parameters.internalObject = {} -- optionally
-  --self.parameters.selectedObject = 1 -- Which object is currently selected
-  --[[
-    for i = 1, 10 do
-    local obj = {}
+  self.parameters.cannyThresholdHigh = 255 --100 -- First/high threshold to find strong edges
+  self.parameters.cannyThresholdLow = 10 --50 -- Second/low threshold for finding weaker edges connected with the strong edges
 
-    obj.objectName = 'Object' .. tostring(i) -- name of the object
-    obj.active = false  -- is this object active
-    -- ...
+  self.parameters.blurKernelSizePix = 15 -- Size of the kernel
 
-    table.insert(self.parameters.internalObject, obj)
-  end
+  self.parameters.cropPosX = 267 -- The x position of the top-left corner of the cropped image in the source image
+  self.parameters.cropPosY = 200 -- The y position of the top-left corner of the cropped image in the source image
+  self.parameters.cropWidth = 150 -- The width of the cropped image
+  self.parameters.cropHeight = 80 -- The height  of the cropped image
 
-  local internalObjectContainer = self.helperFuncs.convertTable2Container(self.parameters.internalObject)
-  ]]
+  self.parameters.showImage = false -- Show image in UI
 
   -- Parameters to give to the processing script
   self.multiImageFilterProcessingParams = Container.create()
   self.multiImageFilterProcessingParams:add('multiImageFilterInstanceNumber', multiImageFilterInstanceNo, "INT")
   self.multiImageFilterProcessingParams:add('registeredEvent', self.parameters.registeredEvent, "STRING")
-  --self.multiImageFilterProcessingParams:add('showImage', self.parameters.showImage, "BOOL")
-  --self.multiImageFilterProcessingParams:add('viewerId', 'multiImageFilterViewer' .. self.multiImageFilterInstanceNoString, "STRING")
 
-  --self.multiImageFilterProcessingParams:add('internalObjects', internalObjectContainer, "OBJECT") -- optionally
-  --self.multiImageFilterProcessingParams:add('selectedObject', self.parameters.selectedObject, "INT")
+  self.multiImageFilterProcessingParams:add('showImage', self.parameters.showImage, "BOOL")
+  self.multiImageFilterProcessingParams:add('viewerId', 'multiImageFilterViewer' .. self.multiImageFilterInstanceNoString, "STRING")
+
+  self.multiImageFilterProcessingParams:add('filterType', self.parameters.filterType, "STRING")
+
+  self.multiImageFilterProcessingParams:add('blurKernelSizePix', self.parameters.blurKernelSizePix, "INT")
+
+  self.multiImageFilterProcessingParams:add('cannyThresholdLow', self.parameters.cannyThresholdLow, "INT")
+  self.multiImageFilterProcessingParams:add('cannyThresholdHigh', self.parameters.cannyThresholdHigh, "INT")
+
+  self.multiImageFilterProcessingParams:add('cropPosX', self.parameters.cropPosX, "INT")
+  self.multiImageFilterProcessingParams:add('cropPosY', self.parameters.cropPosY, "INT")
+  self.multiImageFilterProcessingParams:add('cropWidth', self.parameters.cropWidth, "INT")
+  self.multiImageFilterProcessingParams:add('cropHeight', self.parameters.cropHeight, "INT")
 
   -- Handle processing
   Script.startScript(self.parameters.processingFile, self.multiImageFilterProcessingParams)

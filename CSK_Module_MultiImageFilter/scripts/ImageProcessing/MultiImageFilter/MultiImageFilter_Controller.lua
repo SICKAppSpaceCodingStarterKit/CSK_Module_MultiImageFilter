@@ -29,15 +29,31 @@ local function emptyFunction()
 end
 Script.serveFunction("CSK_MultiImageFilter.processInstanceNUM", emptyFunction)
 
-Script.serveEvent("CSK_MultiImageFilter.OnNewResultNUM", "MultiImageFilter_OnNewResultNUM")
+Script.serveEvent("CSK_MultiImageFilter.OnNewImageNUM", "MultiImageFilter_OnNewImageNUM")
 Script.serveEvent("CSK_MultiImageFilter.OnNewValueToForwardNUM", "MultiImageFilter_OnNewValueToForwardNUM")
 Script.serveEvent("CSK_MultiImageFilter.OnNewValueUpdateNUM", "MultiImageFilter_OnNewValueUpdateNUM")
+
 ----------------------------------------------------------------
 
 -- Real events
 --------------------------------------------------
--- Script.serveEvent("CSK_MultiImageFilter.OnNewEvent", "MultiImageFilter_OnNewEvent")
 Script.serveEvent('CSK_MultiImageFilter.OnNewResult', 'MultiImageFilter_OnNewResult')
+
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusFoundMatches', 'MultiImageFilter_OnNewStatusFoundMatches')
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusMatchScoreResult', 'MultiImageFilter_OnNewStatusMatchScoreResult')
+
+Script.serveEvent("CSK_MultiImageFilter.OnNewViewerID", "MultiImageFilter_OnNewViewerID")
+Script.serveEvent("CSK_MultiImageFilter.OnNewStatusShowImage", "MultiImageFilter_OnNewStatusShowImage")
+Script.serveEvent("CSK_MultiImageFilter.OnNewStatusRegisteredEvent", "MultiImageFilter_OnNewStatusRegisteredEvent")
+
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusImageFilterType', 'MultiImageFilter_OnNewStatusImageFilterType')
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusBlurKernelSizePix', 'MultiImageFilter_OnNewStatusBlurKernelSizePix')
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCannyThresholds', 'MultiImageFilter_OnNewStatusCannyThresholds')
+
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropPosX', 'MultiImageFilter_OnNewStatusCropPosX')
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropPosY', 'MultiImageFilter_OnNewStatusCropPosY')
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropWidth', 'MultiImageFilter_OnNewStatusCropWidth')
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropHeight', 'MultiImageFilter_OnNewStatusCropHeight')
 
 Script.serveEvent("CSK_MultiImageFilter.OnNewStatusLoadParameterOnReboot", "MultiImageFilter_OnNewStatusLoadParameterOnReboot")
 Script.serveEvent("CSK_MultiImageFilter.OnPersistentDataModuleAvailable", "MultiImageFilter_OnPersistentDataModuleAvailable")
@@ -112,7 +128,7 @@ end
 ---@param value auto Value to update
 ---@param selectedObject int? Optionally if internal parameter should be used for internal objects
 local function handleOnNewValueUpdate(instance, parameter, value, selectedObject)
-    multiImageFilter_Instances[instance].parameters.internalObject[selectedObject][parameter] = value
+    --multiImageFilter_Instances[instance].parameters.internalObject[selectedObject][parameter] = value
 end
 
 --- Function to get access to the multiImageFilter_Model object
@@ -170,11 +186,24 @@ local function handleOnExpiredTmrMultiImageFilter()
   Script.notifyEvent('MultiImageFilter_OnNewSelectedInstance', selectedInstance)
   Script.notifyEvent("MultiImageFilter_OnNewInstanceList", helperFuncs.createStringListBySize(#multiImageFilter_Instances))
 
+  Script.notifyEvent('MultiImageFilter_OnNewViewerID', 'multiImageFilterViewer' .. tostring(selectedInstance))
+  Script.notifyEvent('MultiImageFilter_OnNewStatusShowImage', multiImageFilter_Instances[selectedInstance].parameters.showImage)
+
+  Script.notifyEvent('MultiImageFilter_OnNewStatusRegisteredEvent', multiImageFilter_Instances[selectedInstance].parameters.registeredEvent)
+
+  Script.notifyEvent('MultiImageFilter_OnNewStatusImageFilterType', multiImageFilter_Instances[selectedInstance].parameters.filterType)
+  Script.notifyEvent('MultiImageFilter_OnNewStatusBlurKernelSizePix', multiImageFilter_Instances[selectedInstance].parameters.blurKernelSizePix)
+  Script.notifyEvent('MultiImageFilter_OnNewStatusCannyThresholds', {multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdLow, multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdHigh})
+
+  Script.notifyEvent('MultiImageFilter_OnNewStatusCropPosX', multiImageFilter_Instances[selectedInstance].parameters.cropPosX)
+  Script.notifyEvent('MultiImageFilter_OnNewStatusCropPosY', multiImageFilter_Instances[selectedInstance].parameters.cropPosY)
+  Script.notifyEvent('MultiImageFilter_OnNewStatusCropWidth', multiImageFilter_Instances[selectedInstance].parameters.cropWidth)
+  Script.notifyEvent('MultiImageFilter_OnNewStatusCropHeight', multiImageFilter_Instances[selectedInstance].parameters.cropHeight)
+
   Script.notifyEvent("MultiImageFilter_OnNewStatusLoadParameterOnReboot", multiImageFilter_Instances[selectedInstance].parameterLoadOnReboot)
   Script.notifyEvent("MultiImageFilter_OnPersistentDataModuleAvailable", multiImageFilter_Instances[selectedInstance].persistentModuleAvailable)
   Script.notifyEvent("MultiImageFilter_OnNewParameterName", multiImageFilter_Instances[selectedInstance].parametersName)
 
-  -- ...
 end
 Timer.register(tmrMultiImageFilter, "OnExpired", handleOnExpiredTmrMultiImageFilter)
 
@@ -229,19 +258,80 @@ local function setRegisterEvent(event)
 end
 Script.serveFunction("CSK_MultiImageFilter.setRegisterEvent", setRegisterEvent)
 
+local function setShowImage(status)
+  _G.logger:info(nameOfModule .. ": Set show image: " .. tostring(status))
+  multiImageFilter_Instances[selectedInstance].parameters.showImage = status
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'showImage', status)
+end
+Script.serveFunction("CSK_MultiImageFilter.setShowImage", setShowImage)
+
 --- Function to share process relevant configuration with processing threads
 local function updateProcessingParameters()
-  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'value', multiImageFilter_Instances[selectedInstance].parameters.value)
 
-  -- optionally for internal objects...
-  --[[
-  -- Send config to instances
-  local params = helperFuncs.convertTable2Container(multiImageFilter_Instances[selectedInstance].parameters.internalObject)
-  Container.add(data, 'internalObject', params, 'OBJECT')
-  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'FullSetup', data)
-  ]]
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'activeInUI', true)
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'showImage', multiImageFilter_Instances[selectedInstance].parameters.showImage)
+
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'filterType', multiImageFilter_Instances[selectedInstance].parameters.filterType)
+
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'blurKernelSizePix', multiImageFilter_Instances[selectedInstance].parameters.blurKernelSizePix)
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cannyThresholdLow', multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdLow)
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cannyThresholdHigh', multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdHigh)
+
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropPosX', multiImageFilter_Instances[selectedInstance].parameters.cropPosX)
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropPosY', multiImageFilter_Instances[selectedInstance].parameters.cropPosY)
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropWidth', multiImageFilter_Instances[selectedInstance].parameters.cropWidth)
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropHeight', multiImageFilter_Instances[selectedInstance].parameters.cropHeight)
+
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'registeredEvent', multiImageFilter_Instances[selectedInstance].parameters.registeredEvent)
 
 end
+
+local function setFilterType(filterType)
+  multiImageFilter_Instances[selectedInstance].parameters.filterType = filterType
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'filterType', filterType)
+  handleOnExpiredTmrMultiImageFilter()
+end
+Script.serveFunction('CSK_MultiImageFilter.setFilterType', setFilterType)
+
+local function setBlurKernelSizePix(kernelSize)
+  multiImageFilter_Instances[selectedInstance].parameters.blurKernelSizePix = kernelSize
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'blurKernelSizePix', kernelSize)
+end
+Script.serveFunction('CSK_MultiImageFilter.setBlurKernelSizePix', setBlurKernelSizePix)
+
+local function setCannyThreshold(range)
+  multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdLow = range[1]
+  multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdHigh = range[2]
+
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cannyThresholdLow', range[1])
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cannyThresholdHigh', range[2])
+  
+end
+Script.serveFunction('CSK_MultiImageFilter.setCannyThreshold', setCannyThreshold)
+
+local function setCropPosX(posX)
+  multiImageFilter_Instances[selectedInstance].parameters.cropPosX = posX
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropPosX', posX)
+end
+Script.serveFunction('CSK_MultiImageFilter.setCropPosX', setCropPosX)
+
+local function setCropPosY(posY)
+  multiImageFilter_Instances[selectedInstance].parameters.cropPosY = posY
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropPosY', posY)
+end
+Script.serveFunction('CSK_MultiImageFilter.setCropPosY', setCropPosY)
+
+local function setCropWidth(width)
+  multiImageFilter_Instances[selectedInstance].parameters.cropWidth = width
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropWidth', width)
+end
+Script.serveFunction('CSK_MultiImageFilter.setCropWidth', setCropWidth)
+
+local function setCropHeight(height)
+  multiImageFilter_Instances[selectedInstance].parameters.cropHeight = height
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'cropHeight', height)
+end
+Script.serveFunction('CSK_MultiImageFilter.setCropHeight', setCropHeight)
 
 -- *****************************************************************
 -- Following function can be adapted for CSK_PersistentData module usage

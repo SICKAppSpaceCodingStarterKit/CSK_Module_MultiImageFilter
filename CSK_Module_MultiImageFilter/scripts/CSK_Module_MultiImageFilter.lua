@@ -22,8 +22,8 @@
 
 ---@diagnostic disable: undefined-global, redundant-parameter, missing-parameter
 
--- See README file regarding StepByStep instruction to customize this template manually or make use of the cli renaming tool
--- CreationTemplateVersion: X.X.X
+-- 
+-- CreationTemplateVersion: 3.5.0
 --**************************************************************************
 --**********************Start Global Scope *********************************
 --**************************************************************************
@@ -31,7 +31,7 @@
 -- If app property "LuaLoadAllEngineAPI" is FALSE, use this to load and check for required APIs
 -- This can improve performance of garbage collection
 
--- _G.availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- can be used to adjust function scope of the module related on available APIs of the device
+_G.availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- can be used to adjust function scope of the module related on available APIs of the device
 -----------------------------------------------------------
 -- Logger
 _G.logger = Log.SharedLogger.create('ModuleLogger')
@@ -97,9 +97,18 @@ local function main()
   --       If so, the app will trigger the "OnDataLoadedOnReboot" event if ready after loading parameters
   --
   -- Can be used e.g. like this
+  -- CSK_MultiImageFilter.setSelectedInstance(1)
+  -- CSK_MultiImageFilter.setFilterType('Crop')
+  -- CSK_MultiImageFilter.setRegisterEvent('CSK_MultiImageEdgeMatcher.OnNewAlignedImage1')
+  --
+  -- CSK_MultiImageFilter.addInstance()
+  -- CSK_MultiImageFilter.setSelectedInstance(2)
+  -- CSK_MultiImageFilter.setFilterType('Canny')
+  -- CSK_MultiImageFilter.setRegisterEvent('CSK_MultiImageFilter.OnNewImage1')
+
   ----------------------------------------------------------------------------------------
 
-  --startProcessing() --> see above
+  CSK_MultiImageFilter.setSelectedInstance(1)
   CSK_MultiImageFilter.pageCalled() -- Update UI
 
 end

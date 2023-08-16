@@ -5,5 +5,10 @@
   margin: 6px;
 }
 
+.myViewer_CSK_Module_MultiImageFilter > div > div {
+  max-height: 800px;
+  min-height: 800px;
+}
+
 .myCustomCssClass_CSK_Module_MultiImageFilter {
 }

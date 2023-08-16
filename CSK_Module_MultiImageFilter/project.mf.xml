@@ -6,16 +6,25 @@
         </crown>
         <crown name="CSK_MultiImageFilter">
             <trait>released</trait>
-            <desc>Please fill in information regarding: What is the idea of this module and its features? +
-How to use this module in general.... like: +
-{empty} + 
-Typically the features of this module are used like this (check also main script of this module): +
-{empty} + 
-**1) Setup** +
-ToDo +
-{empty} + 
-**2) Something else....** +
-</desc>
+            <desc>Module to provide image filter processing functionality. Multiple instances can be created and will run in multiple threads on the device. +
+This module provides a UI for all relevant features. +
+{empty} +
+Typically to configure this module to work with other modules you should do this: +
+{empty} +
+1) If multiple instances are needed, these can be added via 'addInstance()' (not needed if you only use 1 single instace). +
+2) Select the instance you want to configur via setInstance(). +
+3) Set the image filter type via 'setFilterType' and optionally set according filter values if necessary. + 
+4) Set the event providing the images to be processed e.g. via setRegisterEvent('CSK_ImagePlayer.OnNewImage'). +
+5) Other modules can register on the 'CSK_MultiImageFilter.OnNewImage[NUM]' event to receive the filtred image for further processing. +
+{empty} +
+INFO: It is possible to combine multiple filters / instances by adding instances and to register to the related preprocessed image like described in step 5). +</desc>
+            <enum name="ImageFilter" trait="released">
+                <desc>Available image filter.</desc>
+                <item desc="Convert RGB image to gray image." name="Gray">Gray</item>
+                <item desc="Canny filter" name="Canny">Canny</item>
+                <item desc="Blur filter" name="Blur">Blur</item>
+                <item desc="Crop image." name="Crop">Crop</item>
+            </enum>
             <serves>
                 <event name="OnNewStatusLoadParameterOnReboot">
                     <desc>Notify status if parameters should be loaded on app/device boot up.</desc>
@@ -43,11 +52,11 @@ ToDo +
                 <event name="OnDataLoadedOnReboot">
                     <desc>Event to call if module tried to load parameters and should be ready.</desc>
                 </event>
-                <event name="OnNewResultNUM">
-                    <desc>Example of dynamically created event to provide result of instance. +
-NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +
+                <event name="OnNewImageNUM">
+                    <desc>Example of dynamically created event to provide result image of instance. +
+NUM will be replaced by the number of instance (e.g. "OnNewImage1"). +
 INFO: Other modules can check via "Script.isServedAsEvent" if event of sepecific instance exists.</desc>
-                    <param desc="Result" multiplicity="1" name="result" type="bool"/>
+                    <param alias="Image" desc="Result image." multiplicity="?" name="resultImage" type="object"/>
                 </event>
                 <event name="OnNewParameterName">
                     <desc>Notify name of persistent data parameter.</desc>
@@ -86,6 +95,46 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
                 <event name="OnNewResult">
                     <desc>Generic event to notify results. E.g. to forward results from single instances.</desc>
                     <param desc="Result" multiplicity="1" name="result" type="bool"/>
+                </event>
+                <event name="OnNewStatusImageFilterType">
+                    <desc>Notify selected image filter type.</desc>
+                    <param desc="Filter type." multiplicity="1" name="filterType" type="string"/>
+                </event>
+                <event name="OnNewViewerID">
+                    <desc>Notify currently used viewerID (e.g. to show correct viewer in UI).</desc>
+                    <param desc="viewerID" multiplicity="1" name="viewerID" type="string"/>
+                </event>
+                <event name="OnNewStatusRegisteredEvent">
+                    <desc>Notify event instance is registered to receive new image to process.</desc>
+                    <param desc="Name of event." multiplicity="1" name="eventname" type="string"/>
+                </event>
+                <event name="OnNewStatusShowImage">
+                    <desc>Notify if image should be showed in UI.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnNewStatusBlurKernelSizePix">
+                    <desc>Notify kernel size of blur filter.</desc>
+                    <param desc="Size of the kernel." multiplicity="1" name="size" type="int"/>
+                </event>
+                <event name="OnNewStatusCannyThresholds">
+                    <desc>Notify threshold values of canny filter.</desc>
+                    <param desc="Threshold values." multiplicity="+" name="threshold" type="float"/>
+                </event>
+                <event name="OnNewStatusCropPosX">
+                    <desc>Notify x position to crop image.</desc>
+                    <param desc="The x position of the top-left corner of the cropped image in the source image." multiplicity="1" name="posX" type="int"/>
+                </event>
+                <event name="OnNewStatusCropPosY">
+                    <desc>Notify y position to crop image.</desc>
+                    <param desc="The y position of the top-left corner of the cropped image in the source image." multiplicity="1" name="poxY" type="int"/>
+                </event>
+                <event name="OnNewStatusCropWidth">
+                    <desc>Notify width of cropped image.</desc>
+                    <param desc="The width of the cropped image." multiplicity="1" name="width" type="int"/>
+                </event>
+                <event name="OnNewStatusCropHeight">
+                    <desc>Notify height of cropped image.</desc>
+                    <param desc="The height of the cropped image." multiplicity="1" name="height" type="int"/>
                 </event>
                 <function name="setParameterName">
                     <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
@@ -133,6 +182,38 @@ Needs then to be called via "Script.callFunction".</desc>
                     <desc>Function to reset instances to one single instance. +
 IMPORTANT: As instances start their own threads, the module needs to be restarted if new instances are needed... (see AppEngine docu for "Script.startScript").</desc>
                 </function>
+                <function name="setFilterType">
+                    <desc>Function to set filter type.</desc>
+                    <param desc="Filter type." multiplicity="1" name="filterType" type="enum"/>
+                </function>
+                <function name="setShowImage">
+                    <desc>Function to select if image should be shown on UI.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </function>
+                <function name="setBlurKernelSizePix">
+                    <desc>Function to set kernel size of blur filter.</desc>
+                    <param desc="Size of the kernel. Must be positive." multiplicity="1" name="kernelSize" type="int"/>
+                </function>
+                <function name="setCannyThreshold">
+                    <desc>Function to set threshold range of canny filter.</desc>
+                    <param desc="Threshold" multiplicity="+" name="range" type="float"/>
+                </function>
+                <function name="setCropPosX">
+                    <desc>Function to set x position to crop image.</desc>
+                    <param desc="The x position of the top-left corner of the cropped image in the source image." multiplicity="1" name="posX" type="int"/>
+                </function>
+                <function name="setCropPosY">
+                    <desc>Function to set y position to crop image.</desc>
+                    <param desc="The y position of the top-left corner of the cropped image in the source image." multiplicity="1" name="posY" type="int"/>
+                </function>
+                <function name="setCropWidth">
+                    <desc>Function to set widht of cropped image.</desc>
+                    <param desc="The width of the cropped image." multiplicity="1" name="width" type="int"/>
+                </function>
+                <function name="setCropHeight">
+                    <desc>Function to set height of cropped image.</desc>
+                    <param desc="The height of the cropped image." multiplicity="1" name="height" type="int"/>
+                </function>
             </serves>
         </crown>
         <meta key="author">SICK AG</meta>
@@ -141,7 +222,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
         <meta key="copy-protected">false</meta>
         <meta key="read-protected">false</meta>
         <meta key="crown2-flow-engine">false</meta>
-        <meta key="LuaLoadAllEngineAPI">true</meta>
+        <meta key="LuaLoadAllEngineAPI">false</meta>
         <entry default="CSK_Module_MultiImageFilter.lua" path="scripts"/>
     </application>
 </manifest>

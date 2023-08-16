@@ -2,7 +2,7 @@
 
 -- If App property "LuaLoadAllEngineAPI" is FALSE, use this to load and check for required APIs
 -- This can improve performance of garbage collection
--- local availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- check for available APIs
+local availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- check for available APIs
 -----------------------------------------------------------
 local nameOfModule = 'CSK_MultiImageFilter'
 --Logger
@@ -12,12 +12,11 @@ local scriptParams = Script.getStartArgument() -- Get parameters from model
 
 local multiImageFilterInstanceNumber = scriptParams:get('multiImageFilterInstanceNumber') -- number of this instance
 local multiImageFilterInstanceNumberString = tostring(multiImageFilterInstanceNumber) -- number of this instance as string
---local viewerId = scriptParams:get('viewerId')
---local viewer = View.create(viewerId) --> if needed
--- e.g. local object = MachineLearning.DeepNeuralNetwork.create() -- Use any AppEngine CROWN needed
+local viewerId = scriptParams:get('viewerId')
+local viewer = View.create(viewerId)
 
 -- Event to notify result of processing
-Script.serveEvent("CSK_MultiImageFilter.OnNewResult" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewResult" .. multiImageFilterInstanceNumberString, 'bool') -- Edit this accordingly
+Script.serveEvent("CSK_MultiImageFilter.OnNewImage" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewImage" .. multiImageFilterInstanceNumberString, 'object:?:Image') -- Edit this accordingly
 -- Event to forward content from this thread to Controller to show e.g. on UI
 Script.serveEvent("CSK_MultiImageFilter.OnNewValueToForward".. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, 'string, auto')
 -- Event to forward update of e.g. parameter update to keep data in sync between threads
@@ -26,47 +25,44 @@ Script.serveEvent("CSK_MultiImageFilter.OnNewValueUpdate" .. multiImageFilterIns
 local processingParams = {}
 processingParams.registeredEvent = scriptParams:get('registeredEvent')
 processingParams.activeInUI = false
---processingParams.showImage = scriptParams:get('showImage') -- if needed
+processingParams.showImage = scriptParams:get('showImage')
 
--- optionally
---[[
-local function setAllProcessingParameters(paramContainer)
-  processingParams.paramA = paramContainer:get('paramA')
-  processingParams.paramB = paramContainer:get('paramB')
-  processingParams.selectedObject = paramContainer:get('selectedObject')
+processingParams.filterType = scriptParams:get('filterType')
 
-  -- ...
+processingParams.blurKernelSizePix = scriptParams:get('blurKernelSizePix')
 
-  processingParams.internalObjects = helperFuncs.convertContainer2Table(paramContainer:get('internalObjects'))
+processingParams.cannyThresholdLow = scriptParams:get('cannyThresholdLow')
+processingParams.cannyThresholdHigh = scriptParams:get('cannyThresholdHigh')
 
-end
-setAllProcessingParameters(scriptParams)
-]]
+processingParams.cropPosX = scriptParams:get('cropPosX')
+processingParams.cropPosY = scriptParams:get('cropPosY')
+processingParams.cropWidth = scriptParams:get('cropWidth')
+processingParams.cropHeight = scriptParams:get('cropHeight')
 
-local function handleOnNewProcessing(object)
+local function handleOnNewProcessing(img)
 
   _G.logger:info(nameOfModule .. ": Check object on instance No." .. multiImageFilterInstanceNumberString)
 
-  -- Insert processing part
-  -- E.g.
-  --[[
+  local resultImage
 
-  local result = someProcessingFunctions(object)
-
-  Script.notifyEvent("MultiImageFilter_OnNewValueUpdate" .. multiImageFilterInstanceNumberString, multiImageFilterInstanceNumber, 'valueName', result, processingParams.selectedObject)
+  if processingParams.filterType == 'Gray' then
+    resultImage = Image.toGray(img)
+  elseif processingParams.filterType == 'Canny' then
+    resultImage = Image.canny(img, processingParams.cannyThresholdHigh, processingParams.cannyThresholdLow)
+  elseif processingParams.filterType == 'Blur' then
+    resultImage = Image.blur(img, processingParams.blurKernelSizePix)
+  elseif processingParams.filterType == 'Crop' then
+    resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+  end
 
   if processingParams.showImage and processingParams.activeInUI then
-    viewer:addImage(image)
+    viewer:addImage(resultImage)
     viewer:present("LIVE")
   end
-  ]]
 
-  --_G.logger:info(nameOfModule .. ": Processing on MultiImageFilter" .. multiImageFilterInstanceNumberString .. " was = " .. tostring(result))
-  --Script.notifyEvent('MultiImageFilter_OnNewResult'.. multiImageFilterInstanceNumberString, true)
-
-  --Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, 'MultiColorSelection_CustomEventName', 'content')
-
-  Script.releaseObject(object)
+  if resultImage then
+    Script.notifyEvent('MultiImageFilter_OnNewImage'.. multiImageFilterInstanceNumberString, resultImage)
+  end
 
 end
 Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Alias', 'bool:?') -- Edit this according to this function
