@@ -3,12 +3,12 @@
 
 Module to provide image filter processing functionality (like Blur, Canny, Crop, ...)  
 
-![](https://github.com/SICKAppSpaceCodingStarterKit/CSK_Module_MultiImageFilter/blob/main/docu/media/UI_Screenshot.png)
+![plot](./docu/media/UI_Screenshot.png)
 
 ## How to Run
 
 [***...please fill with informations...***]  
-For further information check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Module_MultiImageFilter/main/docu/CSK_Module_MultiImageFilter.html) in the folder "docu".
+For further information check out the [documentation](https://raw.githack.com/golluroSICKAG/CSK_Module_MultiImageFilter/main/docu/CSK_Module_MultiImageFilter.html) in the folder "docu".
 
 ## Information
 
