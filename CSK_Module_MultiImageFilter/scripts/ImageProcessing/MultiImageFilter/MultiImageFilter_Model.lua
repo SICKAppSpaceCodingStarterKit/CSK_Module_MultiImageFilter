@@ -31,13 +31,6 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.multiImageFilterInstanceNoString = tostring(self.multiImageFilterInstanceNo) -- Number of this instance as string
   self.helperFuncs = require('ImageProcessing/MultiImageFilter/helper/funcs') -- Load helper functions
 
-  -- Optionally check if specific API was loaded via
-  --[[
-  if _G.availableAPIs.specific then
-  -- ... doSomething ...
-  end
-  ]]
-
   -- Create parameters etc. for this module instance
   self.activeInUI = false -- Check if this instance is currently active in UI
 
@@ -52,43 +45,59 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.parametersName = 'CSK_MultiImageFilter_Parameter' .. self.multiImageFilterInstanceNoString -- name of parameter dataset to be used for this module
   self.parameterLoadOnReboot = false -- Status if parameter dataset should be loaded on app/device reboot
 
-  --self.object = Image.create() -- Use any AppEngine CROWN
-  --self.counter = 1 -- Short docu of variable
-  --self.varA = 'value' -- Short docu of variable
-
   -- Parameters to be saved permanently if wanted
   self.parameters = {}
   self.parameters.registeredEvent = '' -- If thread internal function should react on external event, define it here, e.g. 'CSK_OtherModule.OnNewInput'
   self.parameters.processingFile = 'CSK_MultiImageFilter_Processing' -- which file to use for processing (will be started in own thread)
-  --self.parameters.showImage = true -- Short docu of variable
-  --self.parameters.paramA = 'paramA' -- Short docu of variable
-  --self.parameters.paramB = 123 -- Short docu of variable
+  self.parameters.filterType = 'Gray' -- Type of filter to use
 
-  self.parameters.internalObject = {} -- optionally
-  --self.parameters.selectedObject = 1 -- Which object is currently selected
-  --[[
-    for i = 1, 10 do
-    local obj = {}
+  self.parameters.cannyThresholdHigh = 255 --100 -- First/high threshold to find strong edges
+  self.parameters.cannyThresholdLow = 10 --50 -- Second/low threshold for finding weaker edges connected with the strong edges
 
-    obj.objectName = 'Object' .. tostring(i) -- name of the object
-    obj.active = false  -- is this object active
-    -- ...
+  self.parameters.blurKernelSizePix = 15 -- Size of the kernel
 
-    table.insert(self.parameters.internalObject, obj)
-  end
+  self.parameters.cropPosX = 267 -- The x position of the top-left corner of the cropped image in the source image
+  self.parameters.cropPosY = 200 -- The y position of the top-left corner of the cropped image in the source image
+  self.parameters.cropWidth = 150 -- The width of the cropped image
+  self.parameters.cropHeight = 80 -- The height  of the cropped image
 
-  local internalObjectContainer = self.helperFuncs.convertTable2Container(self.parameters.internalObject)
-  ]]
+  self.parameters.transformationSource = 'MANUAL' -- 'MANUAL' or 'EXTERNAL' source for transformation
+  self.parameters.transX = 0 -- Manual transformation in x direction
+  self.parameters.transY = 0 -- Manual transformation in y direction
+  self.parameters.transAngle = 0 -- Manual angle transformation
+  self.parameters.transAngleOriginX = 0 -- X origin for manual angle transformation
+  self.parameters.transAngleOriginY = 0 -- Y origin for manual angle transformation
+  self.parameters.registeredTransformationEvent = '' -- If thread internal function should react on external transformation event, define it here, e.g. 'CSK_OtherModule.OnNewTransformation'
+
+  self.parameters.showImage = false -- Show image in UI
 
   -- Parameters to give to the processing script
   self.multiImageFilterProcessingParams = Container.create()
   self.multiImageFilterProcessingParams:add('multiImageFilterInstanceNumber', multiImageFilterInstanceNo, "INT")
   self.multiImageFilterProcessingParams:add('registeredEvent', self.parameters.registeredEvent, "STRING")
-  --self.multiImageFilterProcessingParams:add('showImage', self.parameters.showImage, "BOOL")
-  --self.multiImageFilterProcessingParams:add('viewerId', 'multiImageFilterViewer' .. self.multiImageFilterInstanceNoString, "STRING")
 
-  --self.multiImageFilterProcessingParams:add('internalObjects', internalObjectContainer, "OBJECT") -- optionally
-  --self.multiImageFilterProcessingParams:add('selectedObject', self.parameters.selectedObject, "INT")
+  self.multiImageFilterProcessingParams:add('showImage', self.parameters.showImage, "BOOL")
+  self.multiImageFilterProcessingParams:add('viewerId', 'multiImageFilterViewer' .. self.multiImageFilterInstanceNoString, "STRING")
+
+  self.multiImageFilterProcessingParams:add('filterType', self.parameters.filterType, "STRING")
+
+  self.multiImageFilterProcessingParams:add('blurKernelSizePix', self.parameters.blurKernelSizePix, "INT")
+
+  self.multiImageFilterProcessingParams:add('cannyThresholdLow', self.parameters.cannyThresholdLow, "INT")
+  self.multiImageFilterProcessingParams:add('cannyThresholdHigh', self.parameters.cannyThresholdHigh, "INT")
+
+  self.multiImageFilterProcessingParams:add('cropPosX', self.parameters.cropPosX, "INT")
+  self.multiImageFilterProcessingParams:add('cropPosY', self.parameters.cropPosY, "INT")
+  self.multiImageFilterProcessingParams:add('cropWidth', self.parameters.cropWidth, "INT")
+  self.multiImageFilterProcessingParams:add('cropHeight', self.parameters.cropHeight, "INT")
+
+  self.multiImageFilterProcessingParams:add('transformationSource', self.parameters.transformationSource, "STRING")
+  self.multiImageFilterProcessingParams:add('transX', self.parameters.transX, "INT")
+  self.multiImageFilterProcessingParams:add('transY', self.parameters.transY, "INT")
+  self.multiImageFilterProcessingParams:add('transAngle', self.parameters.transAngle, "INT")
+  self.multiImageFilterProcessingParams:add('transAngleOriginX', self.parameters.transAngleOriginX, "INT")
+  self.multiImageFilterProcessingParams:add('transAngleOriginY', self.parameters.transAngleOriginY, "INT")
+  self.multiImageFilterProcessingParams:add('registeredTransformationEvent', self.parameters.registeredTransformationEvent, "STRING")
 
   -- Handle processing
   Script.startScript(self.parameters.processingFile, self.multiImageFilterProcessingParams)

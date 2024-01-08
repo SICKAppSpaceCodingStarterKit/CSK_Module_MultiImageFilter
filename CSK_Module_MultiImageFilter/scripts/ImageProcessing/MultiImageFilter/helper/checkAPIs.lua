@@ -9,12 +9,18 @@ local function loadAPIs()
   CSK_MultiImageFilter = require 'API.CSK_MultiImageFilter'
 
   Container = require 'API.Container'
+  DateTime = require 'API.DateTime'
+
   Engine = require 'API.Engine'
+  Image = require 'API.Image'
   Log = require 'API.Log'
   Log.Handler = require 'API.Log.Handler'
   Log.SharedLogger = require 'API.Log.SharedLogger'
   Object = require 'API.Object'
+  Point = require 'API.Point'
   Timer = require 'API.Timer'
+  Transform = require 'API.Transform'
+  View = require 'API.View'
 
   -- Check if related CSK modules are available to be used
   local appList = Engine.listApps()

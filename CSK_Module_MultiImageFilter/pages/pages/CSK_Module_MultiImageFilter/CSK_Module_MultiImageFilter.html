@@ -1,86 +1,488 @@
 <layout-row id="RowLayout1">
 	<layout-column id="ColumnLayout1" style="align-items:stretch">
+		<sick-viewer2d id="Viewer2D1"
+			class="myViewer_CSK_Module_MultiImageFilter"
+			viewer-id="multiImageFilterViewer1"
+			style="width: 100%; height: 100%">
+		</sick-viewer2d>
+	</layout-column>
+	<layout-column id="ColumnLayout2" style="align-items: stretch">
 		<stacked-view id="SV_UserRole">
 			<stacked-pane id="Active_StackedPane1" value="true">
-				<layout-column id="Column_PersistentData"
-					class="myCustomFrame_CSK_Module_MultiImageFilter"
-					style="align-items: stretch">
-					<layout-row id="RowLayout4"
-						style="justify-content: space-between; align-items: center">
-						<layout-column id="ColumnLayout5" style="align-items: stretch">
-							<davinci-value-display id="VD_ParameterName" value="Parameter name:"
-								title="Name of the parameters within the CSK_PersistentData module to be uses for this module.">
-							</davinci-value-display>
-						</layout-column>
-						<layout-column id="ColumnLayout6" style="align-items: stretch">
-							<davinci-text-field id="TF_ParameterName" type="text"
-								title="Name of the parameters within the CSK_PersistentData module to be uses for this module.">
-								<crown-edpws-binding property="value"
-									name="CSK_MultiImageFilter/OnNewParameterName" update-on-resume>
-								</crown-edpws-binding>
-								<crown-binding event="change" name="CSK_MultiImageFilter/setParameterName"
-									path="param/args/name" auto-commit>
-								</crown-binding>
-								<crown-edpws-binding property="disabled"
-									name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
-									update-on-resume converter="function(value) {return !value;}">
-								</crown-edpws-binding>
-							</davinci-text-field>
-						</layout-column>
-					</layout-row>
-					<layout-row id="RowLayout2"
-						style="justify-content: space-between; align-items: center">
-						<davinci-value-display id="VD_LoadConfig"
-							value="Load config on app start:"
-							title="Load configured parameters from CSK_PersistentData on app start.">
-						</davinci-value-display>
-						<davinci-checkbox id="CB_LoadConfig"
-							title="Load configured parameters from CSK_PersistentData on app start.">
-							<span></span>
-							<crown-edpws-binding property="checked"
-								name="CSK_MultiImageFilter/OnNewStatusLoadParameterOnReboot"
-								update-on-resume>
-							</crown-edpws-binding>
-							<crown-edpws-binding property="disabled"
-								name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
-								update-on-resume converter="function(value) {return !value;}">
-							</crown-edpws-binding>
-							<crown-binding event="change" name="CSK_MultiImageFilter/setLoadOnReboot"
-								path="param/args/status" auto-commit>
-							</crown-binding>
-						</davinci-checkbox>
-					</layout-row>
-					<layout-row id="RowLayout3">
-						<layout-column id="ColumnLayout3" style="align-items: stretch">
-							<davinci-button id="B_LoadConfig" type="primary"
-								icon-position="append"
-								title="Load configured parameters from CSK_PersistentData module.">
-								<span>Load Config</span>
-								<crown-binding event="submit" name="CSK_MultiImageFilter/loadParameters"
-									auto-commit>
-								</crown-binding>
-								<crown-edpws-binding property="disabled"
-									name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
-									update-on-resume converter="function(value) {return !value;}">
-								</crown-edpws-binding>
-							</davinci-button>
-						</layout-column>
-						<layout-column id="ColumnLayout4" style="align-items: stretch">
-							<davinci-button id="B_SaveConfig" type="primary"
-								icon-position="append"
-								title="Save current configured parameters of this module within CSK_PersistentData module.">
-								<span>Save Config</span>
-								<crown-binding event="submit" name="CSK_MultiImageFilter/sendParameters"
-									auto-commit>
-								</crown-binding>
-								<crown-edpws-binding property="disabled"
-									name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
-									update-on-resume converter="function(value) {return !value;}">
-								</crown-edpws-binding>
-							</davinci-button>
-						</layout-column>
-					</layout-row>
-				</layout-column>
+				<layout-row id="RowLayout5">
+					<layout-column id="ColumnLayout7" style="align-items: stretch">
+						<davinci-tabs id="Tabs_Setup" type="modern">
+							<davinci-tab id="T_Settings" label="Settings">
+								<layout-row id="RowLayout7">
+									<layout-column id="ColumnLayout8" style="align-items: stretch">
+										<layout-row id="RowLayout11"
+											style="justify-content: space-between; align-items: center">
+											<layout-column id="ColumnLayout33" style="align-items: stretch">
+												<davinci-value-display id="VD_SelectInstance"
+													value="Selected Instance">
+												</davinci-value-display>
+											</layout-column>
+											<layout-column id="ColumnLayout22" style="align-items: stretch">
+												<davinci-drop-down id="DD_SelectInstance">
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setSelectedInstance"
+													path="param/args/instance" auto-commit
+													converter="function(value) {return Number(value);}">
+												</crown-binding>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewSelectedInstance" update-on-resume
+													converter="function(value) {return value.toString();}">
+												</crown-edpws-binding>
+												<crown-edpws-binding property="data"
+													name="CSK_MultiImageFilter/OnNewInstanceList" update-on-resume
+													converter="convertToList">
+												</crown-edpws-binding>
+												</davinci-drop-down>
+											</layout-column>
+										</layout-row>
+										<layout-row id="RowLayout13"
+											style="justify-content: space-between; align-items: center">
+											<davinci-value-display id="VD_ShowImage" value="Show image">
+											</davinci-value-display>
+											<davinci-toggle-switch id="TS_ShowImage">
+												<crown-edpws-binding property="checked"
+													name="CSK_MultiImageFilter/OnNewStatusShowImage" update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change" name="CSK_MultiImageFilter/setShowImage"
+													path="param/args/status" auto-commit>
+												</crown-binding>
+											</davinci-toggle-switch>
+										</layout-row>
+										<layout-row id="RowLayout17" style="align-items: center">
+											<layout-column id="ColumnLayout14" style="align-items: stretch">
+												<davinci-value-display id="VD_RegisteredEvent"
+													value="Registered event:">
+												</davinci-value-display>
+											</layout-column>
+											<layout-column id="ColumnLayout15" style="align-items: stretch">
+												<davinci-text-field id="TF_RegisteredEvent" type="text"
+													label="Registered event" title="e.g. CSK_ImagePlayer.OnNewImage"
+													placeholder="e.g. CSK_ImagePlayer.OnNewImage">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusRegisteredEvent"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setRegisterEvent"
+													path="param/args/event" auto-commit>
+												</crown-binding>
+												</davinci-text-field>
+											</layout-column>
+										</layout-row>
+										<layout-row id="RowLayout19">
+											<layout-column id="ColumnLayout18"
+												class="myCustomFrame_CSK_Module_MultiImageFilter"
+												style="align-items: stretch">
+												<layout-row id="RowLayout18" style="align-items: center">
+												<layout-column id="ColumnLayout16" style="align-items: stretch">
+												<davinci-value-display id="VD_FilterType" value="Filter type:">
+												</davinci-value-display>
+												</layout-column>
+												<layout-column id="ColumnLayout17" style="align-items: stretch">
+												<davinci-drop-down id="DD_ImageFilterType">
+												<davinci-option id="Option_Blur" value="Blur">
+												<span>Blur</span>
+												</davinci-option>
+												<davinci-option id="Option_Canny" value="Canny">
+												<span>Canny</span>
+												</davinci-option>
+												<davinci-option id="Option_Crop" value="Crop">
+												<span>Crop</span>
+												</davinci-option>
+												<davinci-option id="Option_Gray" value="Gray">
+												<span>Gray</span>
+												</davinci-option>
+                                                <davinci-option id="Option_Transfrom" value="Transform">
+												<span>Transform</span>
+												</davinci-option>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusImageFilterType"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setFilterType"
+													path="param/args/filterType" auto-commit>
+												</crown-binding>
+												</davinci-drop-down>
+												</layout-column>
+												</layout-row>
+												<stacked-view id="SV_FilterType">
+												<stacked-pane id="SP_Gray" value="Gray"></stacked-pane>
+												<stacked-pane id="SP_Crop" value="Crop">
+												<layout-row id="RowLayout14">
+												<layout-column id="ColumnLayout13" style="align-items: stretch">
+												<davinci-value-display id="VD_CropPosition"
+													value="X/Y coordinates of crop start point">
+												</davinci-value-display>
+												<layout-row id="RowLayout15">
+												<layout-column id="ColumnLayout19" style="align-items: stretch">
+												<davinci-numeric-field id="NF_Xpos" type="outline" min="0"
+													max="100000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusCropPosX" update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change" name="CSK_MultiImageFilter/setCropPosX"
+													path="param/args/posX" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout20" style="align-items: stretch">
+												<davinci-numeric-field id="NF_Ypos" type="outline" min="0"
+													max="1000000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusCropPosY" update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change" name="CSK_MultiImageFilter/setCropPosY"
+													path="param/args/posY" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												</layout-row>
+												<davinci-value-display id="VD_CropWidthHeight"
+													value="Crop Width / Height">
+												</davinci-value-display>
+												<layout-row id="RowLayout16">
+												<layout-column id="ColumnLayout21" style="align-items: stretch">
+												<davinci-numeric-field id="NF_Width" type="outline" min="1"
+													max="1000000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-binding event="change" name="CSK_MultiImageFilter/setCropWidth"
+													path="param/args/width" auto-commit>
+												</crown-binding>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusCropWidth" update-on-resume>
+												</crown-edpws-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout23" style="align-items: stretch">
+												<davinci-numeric-field id="NF_Height" type="outline" min="1"
+													max="100000000" ticks="1" group-separator=","
+													decimal-separator="." format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusCropHeight"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setCropHeight" path="param/args/height"
+													auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												</layout-row>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+												<stacked-pane id="SP_Blur" value="Blur">
+												<layout-row id="RowLayout9">
+												<layout-column id="ColumnLayout9" style="align-items: stretch">
+												<davinci-value-display id="VD_BlurKernel" value="Kernel size">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_BlurKernel" type="outline" min="1"
+													max="1000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusBlurKernelSizePix"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setBlurKernelSizePix"
+													path="param/args/kernelSize" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+												<stacked-pane id="SP_Canny" value="Canny">
+												<layout-row id="RowLayout10">
+												<layout-column id="ColumnLayout10" style="align-items: stretch">
+												<davinci-range-slider id="RS_CannyThreshold" max="255" ticks="0.1"
+													style="width: 100%">
+												<span>Threshold</span>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setCannyThreshold"
+													path="param/args/range" auto-commit>
+												</crown-binding>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusCannyThresholds"
+													update-on-resume
+													converter="function(value) {return [value[0], value[1]];}">
+												</crown-edpws-binding>
+												</davinci-range-slider>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+                                                <stacked-pane id="SP_Transform" value="Transform">
+												<layout-row id="RowLayout20">
+												<layout-column id="ColumnLayout24" style="align-items: stretch">
+												<davinci-drop-down id="DD_TransformSource"
+													label="Transformation mode">
+												<davinci-option id="Option_Manual" value="MANUAL">
+												<span>MANUAL</span>
+												</davinci-option>
+												<davinci-option id="Option_External" value="EXTERNAL">
+												<span>EXTERNAL</span>
+												</davinci-option>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationSource"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationSource"
+													path="param/args/source" auto-commit>
+												</crown-binding>
+												</davinci-drop-down>
+												<stacked-view id="SV_TransformMode">
+												<stacked-pane id="SP_Manual" value="MANUAL">
+												<layout-row id="RowLayout22">
+												<layout-column id="ColumnLayout27" style="align-items: stretch">
+												<layout-row id="RowLayout24">
+												<layout-column id="ColumnLayout29" style="align-items: stretch">
+												<davinci-value-display id="VD_Angle" value="Angle">
+												</davinci-value-display>
+												<davinci-numeric-field id="TransAngle" type="outline" min="-180"
+													max="180" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationAngle"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationAngle"
+													path="param/args/angle" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout32" style="align-items: stretch">
+												<davinci-value-display id="VD_OriginX" value="X origin">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_OriginX" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationAngleOriginX"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationAngleOriginX"
+													path="param/args/xPos" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout35" style="align-items: stretch">
+												<davinci-value-display id="VD_OriginY" value="Y origin">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_OriginY" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationAngleOriginY"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationAngleOriginY"
+													path="param/args/yPos" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												</layout-row>
+												<layout-row id="RowLayout25">
+												<layout-column id="ColumnLayout31" style="align-items: stretch">
+												<davinci-value-display id="VD_TransX" value="TransformationX">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_TransX" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationX"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationX" path="param/args/x"
+													auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout30" style="align-items: stretch">
+												<davinci-value-display id="VD_TransY" value="TransformationY">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_TransY" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationY"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationY" path="param/args/y"
+													auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout34" style="align-items: stretch">
+												</layout-column>
+											</layout-row>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+												<stacked-pane id="SP_ExternalSource" value="EXTERNAL">
+												<layout-row id="RowLayout23">
+												<layout-column id="ColumnLayout28" style="align-items: stretch">
+												<layout-row id="RowLayout21" style="align-items: center">
+												<layout-column id="ColumnLayout25" style="align-items: stretch">
+												<davinci-value-display id="VD_TransformEvent"
+													value="Transformation event:">
+												</davinci-value-display>
+												</layout-column>
+												<layout-column id="ColumnLayout26" style="align-items: stretch">
+												<davinci-text-field id="TF_TransformEvent" type="text"
+													title="e.g. CSK_MultiImageEdgeMatcher.OnNewTransformation"
+													placeholder="e.g. CSK_MultiImageEdgeMatcher.OnNewTransformation">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusRegisteredTransformationEvent"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setRegisterTransformationEvent"
+													path="param/args/event" auto-commit>
+												</crown-binding>
+												</davinci-text-field>
+												</layout-column>
+												</layout-row>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationSource"
+													update-on-resume>
+												</crown-edpws-binding>
+												</stacked-view>
+												</layout-column>
+											</layout-row>
+											</stacked-pane>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusImageFilterType"
+													update-on-resume>
+												</crown-edpws-binding>
+												</stacked-view>
+											</layout-column>
+										</layout-row>
+									</layout-column>
+								</layout-row>
+							</davinci-tab>
+							<davinci-tab id="Tab_Instances" label="Instances">
+								<layout-row id="RowLayout12">
+									<layout-column id="ColumnLayout11" style="align-items: stretch">
+										<davinci-button id="Button_AddInstance" type="primary"
+											icon-position="append">
+											<span>Add instance</span>
+											<crown-binding event="submit" name="CSK_MultiImageFilter/addInstance"
+												auto-commit>
+											</crown-binding>
+										</davinci-button>
+										<davinci-button id="Button_ResetInstances" type="primary"
+											icon-position="append"
+											title="Reset insances to single instance. Reload app after reseting.">
+											<span>Reset instance</span>
+											<crown-binding event="submit"
+												name="CSK_MultiImageFilter/resetInstances" auto-commit>
+											</crown-binding>
+										</davinci-button>
+									</layout-column>
+								</layout-row>
+							</davinci-tab>
+						</davinci-tabs>
+						<layout-row id="RowLayout8">
+							<layout-column id="Column_PersistentData"
+								class="myCustomFrame_CSK_Module_MultiImageFilter"
+								style="align-items: stretch">
+								<layout-row id="RowLayout4"
+									style="justify-content: space-between; align-items: center">
+									<layout-column id="ColumnLayout5" style="align-items: stretch">
+										<davinci-value-display id="VD_ParameterName" value="Parameter name:"
+											title="Name of the parameters within the CSK_PersistentData module to be uses for this module.">
+										</davinci-value-display>
+									</layout-column>
+									<layout-column id="ColumnLayout6" style="align-items: stretch">
+										<davinci-text-field id="TF_ParameterName" type="text"
+											title="Name of the parameters within the CSK_PersistentData module to be uses for this module.">
+											<crown-edpws-binding property="value"
+												name="CSK_MultiImageFilter/OnNewParameterName" update-on-resume>
+											</crown-edpws-binding>
+											<crown-binding event="change"
+												name="CSK_MultiImageFilter/setParameterName"
+												path="param/args/name" auto-commit>
+											</crown-binding>
+											<crown-edpws-binding property="disabled"
+												name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
+												update-on-resume converter="function(value) {return !value;}">
+											</crown-edpws-binding>
+										</davinci-text-field>
+									</layout-column>
+								</layout-row>
+								<layout-row id="RowLayout2"
+									style="justify-content: space-between; align-items: center">
+									<davinci-value-display id="VD_LoadConfig"
+										value="Load config on app start:"
+										title="Load configured parameters from CSK_PersistentData on app start.">
+									</davinci-value-display>
+									<davinci-checkbox id="CB_LoadConfig"
+										title="Load configured parameters from CSK_PersistentData on app start.">
+										<span></span>
+										<crown-edpws-binding property="checked"
+											name="CSK_MultiImageFilter/OnNewStatusLoadParameterOnReboot"
+											update-on-resume>
+										</crown-edpws-binding>
+										<crown-edpws-binding property="disabled"
+											name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
+											update-on-resume converter="function(value) {return !value;}">
+										</crown-edpws-binding>
+										<crown-binding event="change"
+											name="CSK_MultiImageFilter/setLoadOnReboot"
+											path="param/args/status" auto-commit>
+										</crown-binding>
+									</davinci-checkbox>
+								</layout-row>
+								<layout-row id="RowLayout3">
+									<layout-column id="ColumnLayout3" style="align-items: stretch">
+										<davinci-button id="B_LoadConfig" type="primary"
+											icon-position="append"
+											title="Load configured parameters from CSK_PersistentData module.">
+											<span>Load Config</span>
+											<crown-binding event="submit"
+												name="CSK_MultiImageFilter/loadParameters" auto-commit>
+											</crown-binding>
+											<crown-edpws-binding property="disabled"
+												name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
+												update-on-resume converter="function(value) {return !value;}">
+											</crown-edpws-binding>
+										</davinci-button>
+									</layout-column>
+									<layout-column id="ColumnLayout4" style="align-items: stretch">
+										<davinci-button id="B_SaveConfig" type="primary"
+											icon-position="append"
+											title="Save current configured parameters of this module within CSK_PersistentData module.">
+											<span>Save Config</span>
+											<crown-binding event="submit"
+												name="CSK_MultiImageFilter/sendParameters" auto-commit>
+											</crown-binding>
+											<crown-edpws-binding property="disabled"
+												name="CSK_MultiImageFilter/OnPersistentDataModuleAvailable"
+												update-on-resume converter="function(value) {return !value;}">
+											</crown-edpws-binding>
+										</davinci-button>
+									</layout-column>
+								</layout-row>
+							</layout-column>
+						</layout-row>
+					</layout-column>
+				</layout-row>
 			</stacked-pane>
 			<stacked-pane id="SP_LoginNOK" value="false">
 				<layout-row id="RowLayout6">
@@ -90,7 +492,8 @@
 				</layout-row>
 			</stacked-pane>
 			<crown-edpws-binding property="value"
-				name="CSK_MultiImageFilter/OnUserLevelOperatorActive" update-on-resume
+				name="CSK_MultiImageFilter/OnUserLevelOperatorActive"
+				update-on-resume
 				converter="function(value) {return value.toString();}">
 			</crown-edpws-binding>
 		</stacked-view>
@@ -98,34 +501,13 @@
 			<crown-binding property="value" name="CSK_MultiImageFilter/pageCalled"
 				path="result/data/empty" auto-update="0" update-on-resume>
 			</crown-binding>
+			<crown-edpws-binding property="value"
+				name="CSK_MultiImageFilter/OnNewViewerID" update-on-resume
+				converter="changeID">
+			</crown-edpws-binding>
 		</stacked-view>
 	</layout-column>
-	<layout-column id="ColumnLayout2" style="flex-grow:3">
-        <layout-row id="RowLayout11"
-			style="justify-content: space-between; align-items: center">
-			<layout-column id="ColumnLayout33" style="align-items: stretch">
-				<davinci-value-display id="VD_SelectInstance"
-					value="Selected Instance">
-				</davinci-value-display>
-			</layout-column>
-			<layout-column id="ColumnLayout22" style="align-items: stretch">
-				<davinci-drop-down id="DD_SelectInstance">
-					<crown-binding event="change"
-						name="CSK_MultiImageFilter/setSelectedInstance"
-						path="param/args/instance" auto-commit
-						converter="function(value) {return Number(value);}">
-					</crown-binding>
-					<crown-edpws-binding property="value"
-						name="CSK_MultiImageFilter/OnNewSelectedInstance" update-on-resume
-						converter="function(value) {return value.toString();}">
-					</crown-edpws-binding>
-					<crown-edpws-binding property="data"
-						name="CSK_MultiImageFilter/OnNewInstanceList" update-on-resume
-						converter="convertToList">
-					</crown-edpws-binding>
-				</davinci-drop-down>
-			</layout-column>
-		</layout-row>
+	<layout-column id="ColumnLayout12" style="align-items: stretch">
 	</layout-column>
   
 </layout-row>
