@@ -619,7 +619,7 @@ h1,h2,h3,h4,h5,h6{color:#007cc1}
 <div class="details">
 <span id="author" class="author">SICK AG</span><br>
 <span id="revnumber">version 0.1.0,</span>
-<span id="revdate">2023-08-16</span>
+<span id="revdate">2024-01-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -655,8 +655,15 @@ h1,h2,h3,h4,h5,h6{color:#007cc1}
 <li><a href="#API:Function:CSK_MultiImageFilter.setLoadOnReboot"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setLoadOnReboot()</span></a></li>
 <li><a href="#API:Function:CSK_MultiImageFilter.setParameterName"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setParameterName()</span></a></li>
 <li><a href="#API:Function:CSK_MultiImageFilter.setRegisterEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setRegisterEvent()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setRegisterTransformationEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setRegisterTransformationEvent()</span></a></li>
 <li><a href="#API:Function:CSK_MultiImageFilter.setSelectedInstance"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setSelectedInstance()</span></a></li>
 <li><a href="#API:Function:CSK_MultiImageFilter.setShowImage"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setShowImage()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setTransformationAngle"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationAngle()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setTransformationAngleOriginX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationAngleOriginX()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setTransformationAngleOriginY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationAngleOriginY()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setTransformationSource"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationSource()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setTransformationX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationX()</span></a></li>
+<li><a href="#API:Function:CSK_MultiImageFilter.setTransformationY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationY()</span></a></li>
 </ul>
 </li>
 <li><a href="#_events">Events</a>
@@ -677,7 +684,14 @@ h1,h2,h3,h4,h5,h6{color:#007cc1}
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusImageFilterType"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusImageFilterType</span></a></li>
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusLoadParameterOnReboot"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusLoadParameterOnReboot</span></a></li>
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusRegisteredEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusRegisteredEvent</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusRegisteredTransformationEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusRegisteredTransformationEvent</span></a></li>
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusShowImage"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusShowImage</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngle"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationAngle</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationAngleOriginX</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationAngleOriginY</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationSource"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationSource</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationX</span></a></li>
+<li><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationY</span></a></li>
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewValueToForwardNUM"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewValueToForwardNUM</span></a></li>
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewValueUpdateNUM"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewValueUpdateNUM</span></a></li>
 <li><a href="#API:Event:CSK_MultiImageFilter.OnNewViewerID"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewViewerID</span></a></li>
@@ -720,7 +734,7 @@ h1,h2,h3,h4,h5,h6{color:#007cc1}
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock">Date</p></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2023-08-16</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2024-01-08</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-left valign-top"><p class="tableblock">Author</p></th>
@@ -834,10 +848,31 @@ INFO: It is possible to combine multiple filters / instances by adding instances
 <p><a href="#API:Function:CSK_MultiImageFilter.setRegisterEvent">setRegisterEvent()</a></p>
 </li>
 <li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setRegisterTransformationEvent">setRegisterTransformationEvent()</a></p>
+</li>
+<li>
 <p><a href="#API:Function:CSK_MultiImageFilter.setSelectedInstance">setSelectedInstance()</a></p>
 </li>
 <li>
 <p><a href="#API:Function:CSK_MultiImageFilter.setShowImage">setShowImage()</a></p>
+</li>
+<li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setTransformationAngle">setTransformationAngle()</a></p>
+</li>
+<li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setTransformationAngleOriginX">setTransformationAngleOriginX()</a></p>
+</li>
+<li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setTransformationAngleOriginY">setTransformationAngleOriginY()</a></p>
+</li>
+<li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setTransformationSource">setTransformationSource()</a></p>
+</li>
+<li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setTransformationX">setTransformationX()</a></p>
+</li>
+<li>
+<p><a href="#API:Function:CSK_MultiImageFilter.setTransformationY">setTransformationY()</a></p>
 </li>
 <li>
 <p><a href="#API:Event:CSK_MultiImageFilter.OnDataLoadedOnReboot">OnDataLoadedOnReboot</a></p>
@@ -888,7 +923,28 @@ INFO: It is possible to combine multiple filters / instances by adding instances
 <p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusRegisteredEvent">OnNewStatusRegisteredEvent</a></p>
 </li>
 <li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusRegisteredTransformationEvent">OnNewStatusRegisteredTransformationEvent</a></p>
+</li>
+<li>
 <p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusShowImage">OnNewStatusShowImage</a></p>
+</li>
+<li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngle">OnNewStatusTransformationAngle</a></p>
+</li>
+<li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginX">OnNewStatusTransformationAngleOriginX</a></p>
+</li>
+<li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginY">OnNewStatusTransformationAngleOriginY</a></p>
+</li>
+<li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationSource">OnNewStatusTransformationSource</a></p>
+</li>
+<li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationX">OnNewStatusTransformationX</a></p>
+</li>
+<li>
+<p><a href="#API:Event:CSK_MultiImageFilter.OnNewStatusTransformationY">OnNewStatusTransformationY</a></p>
 </li>
 <li>
 <p><a href="#API:Event:CSK_MultiImageFilter.OnNewValueToForwardNUM">OnNewValueToForwardNUM</a></p>
@@ -1077,6 +1133,13 @@ Needs then to be called via "Script.callFunction".</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Transferred object (optional)</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">translation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OBJECT<br>
+<a href="#API:Crown:Container">Container</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">?</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional transformation data (xTrans, yTrans)</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1111,7 +1174,7 @@ Needs then to be called via "Script.callFunction".</p>
 <h6 id="_sample_auto_generated_5">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="lua">result = CSK_MultiImageFilter.processInstanceNUM(object)</code></pre>
+<pre class="CodeRay highlight"><code data-lang="lua">result = CSK_MultiImageFilter.processInstanceNUM(object, translation)</code></pre>
 </div>
 </div>
 </div>
@@ -1594,15 +1657,59 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
 </div>
 </div>
 <div class="sect4">
-<h5 id="API:Function:CSK_MultiImageFilter.setSelectedInstance"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setSelectedInstance()</span></h5>
+<h5 id="API:Function:CSK_MultiImageFilter.setRegisterTransformationEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setRegisterTransformationEvent()</span></h5>
 <div class="sect5">
 <h6 id="_short_description_20">Short description</h6>
+<div class="paragraph">
+<p>Function to set event to receive transformation data to align image.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_12">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">event</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRING</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Event (needs to provide translation data as 'Transform' object).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_18">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setRegisterTransformationEvent(event)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setSelectedInstance"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setSelectedInstance()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_21">Short description</h6>
 <div class="paragraph">
 <p>Select one of the multiple instances.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_parameters_12">Parameters</h6>
+<h6 id="_parameters_13">Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1629,7 +1736,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_18">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_19">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setSelectedInstance(instance)</code></pre>
@@ -1640,13 +1747,13 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
 <div class="sect4">
 <h5 id="API:Function:CSK_MultiImageFilter.setShowImage"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setShowImage()</span></h5>
 <div class="sect5">
-<h6 id="_short_description_21">Short description</h6>
+<h6 id="_short_description_22">Short description</h6>
 <div class="paragraph">
 <p>Function to select if image should be shown on UI.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_parameters_13">Parameters</h6>
+<h6 id="_parameters_14">Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1673,10 +1780,274 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_19">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_20">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setShowImage(status)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setTransformationAngle"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationAngle()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_23">Short description</h6>
+<div class="paragraph">
+<p>Functin to set manual transformation angle.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_15">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">angle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformation angle in degree between -180 and +180.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_21">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setTransformationAngle(angle)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setTransformationAngleOriginX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationAngleOriginX()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_24">Short description</h6>
+<div class="paragraph">
+<p>Function to set xPos of origin for manual angle transformation.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_16">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">xPos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x position</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_22">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setTransformationAngleOriginX(xPos)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setTransformationAngleOriginY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationAngleOriginY()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_25">Short description</h6>
+<div class="paragraph">
+<p>Function to set yPos of origin for manual angle transformation.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_17">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yPos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">y position</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_23">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setTransformationAngleOriginY(yPos)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setTransformationSource"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationSource()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_26">Short description</h6>
+<div class="paragraph">
+<p>Function to set source of transformation data.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_18">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">source</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRING</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_24">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setTransformationSource(source)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setTransformationX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationX()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_27">Short description</h6>
+<div class="paragraph">
+<p>Functin to set manual transformation in x direction.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_19">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Translation in x direction.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_25">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setTransformationX(x)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Function:CSK_MultiImageFilter.setTransformationY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-function">setTransformationY()</span></h5>
+<div class="sect5">
+<h6 id="_short_description_28">Short description</h6>
+<div class="paragraph">
+<p>Functin to set manual transformation in y direction.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_parameters_20">Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">y</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Translation in y direction.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_26">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua">CSK_MultiImageFilter.setTransformationY(y)</code></pre>
 </div>
 </div>
 </div>
@@ -1687,13 +2058,13 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnDataLoadedOnReboot"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnDataLoadedOnReboot</span></h5>
 <div class="sect5">
-<h6 id="_short_description_22">Short description</h6>
+<h6 id="_short_description_29">Short description</h6>
 <div class="paragraph">
 <p>Event to call if module tried to load parameters and should be ready.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_20">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_27">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnDataLoadedOnReboot</span>()
@@ -1708,7 +2079,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewImageNUM"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewImageNUM</span></h5>
 <div class="sect5">
-<h6 id="_short_description_23">Short description</h6>
+<h6 id="_short_description_30">Short description</h6>
 <div class="paragraph">
 <p>Example of dynamically created event to provide result image of instance.<br>
 NUM will be replaced by the number of instance (e.g. "OnNewImage1").<br>
@@ -1744,7 +2115,7 @@ INFO: Other modules can check via "Script.isServedAsEvent" if event of sepecific
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_21">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_28">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewImageNUM</span>(resultImage)
@@ -1759,7 +2130,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewInstanceList"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewInstanceList</span></h5>
 <div class="sect5">
-<h6 id="_short_description_24">Short description</h6>
+<h6 id="_short_description_31">Short description</h6>
 <div class="paragraph">
 <p>Event to provide list of created instances.</p>
 </div>
@@ -1792,7 +2163,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_22">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_29">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewInstanceList</span>(list)
@@ -1807,7 +2178,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewParameterName"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewParameterName</span></h5>
 <div class="sect5">
-<h6 id="_short_description_25">Short description</h6>
+<h6 id="_short_description_32">Short description</h6>
 <div class="paragraph">
 <p>Notify name of persistent data parameter.</p>
 </div>
@@ -1840,7 +2211,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_23">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_30">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewParameterName</span>(name)
@@ -1855,7 +2226,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewProcessingParameter"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewProcessingParameter</span></h5>
 <div class="sect5">
-<h6 id="_short_description_26">Short description</h6>
+<h6 id="_short_description_33">Short description</h6>
 <div class="paragraph">
 <p>Event to share processing parameters to the instances.</p>
 </div>
@@ -1906,7 +2277,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_24">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_31">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewProcessingParameter</span>(objectNo, parameter, value, internalObjectNo)
@@ -1921,7 +2292,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewResult"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewResult</span></h5>
 <div class="sect5">
-<h6 id="_short_description_27">Short description</h6>
+<h6 id="_short_description_34">Short description</h6>
 <div class="paragraph">
 <p>Generic event to notify results. E.g. to forward results from single instances.</p>
 </div>
@@ -1954,7 +2325,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_25">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_32">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewResult</span>(result)
@@ -1969,7 +2340,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewSelectedInstance"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewSelectedInstance</span></h5>
 <div class="sect5">
-<h6 id="_short_description_28">Short description</h6>
+<h6 id="_short_description_35">Short description</h6>
 <div class="paragraph">
 <p>Notify if new instance is selected.</p>
 </div>
@@ -2002,7 +2373,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_26">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_33">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewSelectedInstance</span>(selectedObject)
@@ -2017,7 +2388,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusBlurKernelSizePix"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusBlurKernelSizePix</span></h5>
 <div class="sect5">
-<h6 id="_short_description_29">Short description</h6>
+<h6 id="_short_description_36">Short description</h6>
 <div class="paragraph">
 <p>Notify kernel size of blur filter.</p>
 </div>
@@ -2050,7 +2421,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_27">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_34">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusBlurKernelSizePix</span>(size)
@@ -2065,7 +2436,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusCannyThresholds"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusCannyThresholds</span></h5>
 <div class="sect5">
-<h6 id="_short_description_30">Short description</h6>
+<h6 id="_short_description_37">Short description</h6>
 <div class="paragraph">
 <p>Notify threshold values of canny filter.</p>
 </div>
@@ -2098,7 +2469,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_28">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_35">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusCannyThresholds</span>(threshold)
@@ -2113,7 +2484,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusCropHeight"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusCropHeight</span></h5>
 <div class="sect5">
-<h6 id="_short_description_31">Short description</h6>
+<h6 id="_short_description_38">Short description</h6>
 <div class="paragraph">
 <p>Notify height of cropped image.</p>
 </div>
@@ -2146,7 +2517,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_29">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_36">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusCropHeight</span>(height)
@@ -2161,7 +2532,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusCropPosX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusCropPosX</span></h5>
 <div class="sect5">
-<h6 id="_short_description_32">Short description</h6>
+<h6 id="_short_description_39">Short description</h6>
 <div class="paragraph">
 <p>Notify x position to crop image.</p>
 </div>
@@ -2194,7 +2565,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_30">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_37">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusCropPosX</span>(posX)
@@ -2209,7 +2580,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusCropPosY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusCropPosY</span></h5>
 <div class="sect5">
-<h6 id="_short_description_33">Short description</h6>
+<h6 id="_short_description_40">Short description</h6>
 <div class="paragraph">
 <p>Notify y position to crop image.</p>
 </div>
@@ -2242,7 +2613,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_31">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_38">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusCropPosY</span>(poxY)
@@ -2257,7 +2628,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusCropWidth"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusCropWidth</span></h5>
 <div class="sect5">
-<h6 id="_short_description_34">Short description</h6>
+<h6 id="_short_description_41">Short description</h6>
 <div class="paragraph">
 <p>Notify width of cropped image.</p>
 </div>
@@ -2290,7 +2661,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_32">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_39">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusCropWidth</span>(width)
@@ -2305,7 +2676,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusImageFilterType"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusImageFilterType</span></h5>
 <div class="sect5">
-<h6 id="_short_description_35">Short description</h6>
+<h6 id="_short_description_42">Short description</h6>
 <div class="paragraph">
 <p>Notify selected image filter type.</p>
 </div>
@@ -2338,7 +2709,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_33">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_40">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusImageFilterType</span>(filterType)
@@ -2353,7 +2724,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusLoadParameterOnReboot"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusLoadParameterOnReboot</span></h5>
 <div class="sect5">
-<h6 id="_short_description_36">Short description</h6>
+<h6 id="_short_description_43">Short description</h6>
 <div class="paragraph">
 <p>Notify status if parameters should be loaded on app/device boot up.</p>
 </div>
@@ -2386,7 +2757,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_34">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_41">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusLoadParameterOnReboot</span>(status)
@@ -2401,7 +2772,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusRegisteredEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusRegisteredEvent</span></h5>
 <div class="sect5">
-<h6 id="_short_description_37">Short description</h6>
+<h6 id="_short_description_44">Short description</h6>
 <div class="paragraph">
 <p>Notify event instance is registered to receive new image to process.</p>
 </div>
@@ -2434,7 +2805,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_35">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_42">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusRegisteredEvent</span>(eventname)
@@ -2447,15 +2818,63 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </div>
 </div>
 <div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusRegisteredTransformationEvent"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusRegisteredTransformationEvent</span></h5>
+<div class="sect5">
+<h6 id="_short_description_45">Short description</h6>
+<div class="paragraph">
+<p>Notify event to receive transformation data to align image.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_16">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">eventName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRING</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of event.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_43">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusRegisteredTransformationEvent</span>(eventName)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusRegisteredTransformationEvent</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusRegisteredTransformationEvent</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusShowImage"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusShowImage</span></h5>
 <div class="sect5">
-<h6 id="_short_description_38">Short description</h6>
+<h6 id="_short_description_46">Short description</h6>
 <div class="paragraph">
 <p>Notify if image should be showed in UI.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_16">Callback arguments</h6>
+<h6 id="_callback_arguments_17">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2482,7 +2901,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_36">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_44">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusShowImage</span>(status)
@@ -2495,16 +2914,304 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </div>
 </div>
 <div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngle"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationAngle</span></h5>
+<div class="sect5">
+<h6 id="_short_description_47">Short description</h6>
+<div class="paragraph">
+<p>Notify manual transformation angle.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_18">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">angle</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformation angle.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_45">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusTransformationAngle</span>(angle)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusTransformationAngle</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusTransformationAngle</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationAngleOriginX</span></h5>
+<div class="sect5">
+<h6 id="_short_description_48">Short description</h6>
+<div class="paragraph">
+<p>Notify transformation angle origin x position.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_19">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">xPos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x position</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_46">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusTransformationAngleOriginX</span>(xPos)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginX</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusTransformationAngleOriginX</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationAngleOriginY</span></h5>
+<div class="sect5">
+<h6 id="_short_description_49">Short description</h6>
+<div class="paragraph">
+<p>Notify transformation angle origin y position.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_20">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yPos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">y position</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_47">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusTransformationAngleOriginY</span>(yPos)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusTransformationAngleOriginY</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusTransformationAngleOriginY</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusTransformationSource"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationSource</span></h5>
+<div class="sect5">
+<h6 id="_short_description_50">Short description</h6>
+<div class="paragraph">
+<p>Notify source for transformation data.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_21">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mode</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STRING</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mode</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_48">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusTransformationSource</span>(mode)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusTransformationSource</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusTransformationSource</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusTransformationX"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationX</span></h5>
+<div class="sect5">
+<h6 id="_short_description_51">Short description</h6>
+<div class="paragraph">
+<p>Notify manual transformation in x direction.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_22">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">xTrans</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformation in x direction.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_49">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusTransformationX</span>(xTrans)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusTransformationX</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusTransformationX</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="API:Event:CSK_MultiImageFilter.OnNewStatusTransformationY"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewStatusTransformationY</span></h5>
+<div class="sect5">
+<h6 id="_short_description_52">Short description</h6>
+<div class="paragraph">
+<p>Notify manual transformation in y direction.</p>
+</div>
+</div>
+<div class="sect5">
+<h6 id="_callback_arguments_23">Callback arguments</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 37.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Multiplicity</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yTrans</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transformation in y direction.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="_sample_auto_generated_50">Sample (auto-generated)</h6>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewStatusTransformationY</span>(yTrans)
+  <span class="comment">-- Do something</span>
+<span class="keyword">end</span>
+
+Script.register(<span class="string"><span class="delimiter">&quot;</span><span class="content">CSK_MultiImageFilter.OnNewStatusTransformationY</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">handleOnNewStatusTransformationY</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewValueToForwardNUM"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewValueToForwardNUM</span></h5>
 <div class="sect5">
-<h6 id="_short_description_39">Short description</h6>
+<h6 id="_short_description_53">Short description</h6>
 <div class="paragraph">
 <p>Example of dynamically created event to forward data from instance thread to Controller part of module, e.g. to forward values to UI.<br>
 NUM will be replaced by the number of instance (e.g. "OnNewResult1").<br></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_17">Callback arguments</h6>
+<h6 id="_callback_arguments_24">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2537,7 +3244,7 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1").<br></p>
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_37">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_51">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewValueToForwardNUM</span>(eventname, value)
@@ -2552,14 +3259,14 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewValueUpdateNUM"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewValueUpdateNUM</span></h5>
 <div class="sect5">
-<h6 id="_short_description_40">Short description</h6>
+<h6 id="_short_description_54">Short description</h6>
 <div class="paragraph">
 <p>Example of dynamically created event to sync paramters between instance threads and Controller part of module.<br>
 NUM will be replaced by the number of instance (e.g. "OnNewResult1").<br></p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_18">Callback arguments</h6>
+<h6 id="_callback_arguments_25">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2604,7 +3311,7 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1").<br></p>
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_38">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_52">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewValueUpdateNUM</span>(instance, parameter, value, selectedObject)
@@ -2619,13 +3326,13 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnNewViewerID"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnNewViewerID</span></h5>
 <div class="sect5">
-<h6 id="_short_description_41">Short description</h6>
+<h6 id="_short_description_55">Short description</h6>
 <div class="paragraph">
 <p>Notify currently used viewerID (e.g. to show correct viewer in UI).</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_19">Callback arguments</h6>
+<h6 id="_callback_arguments_26">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2652,7 +3359,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_39">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_53">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnNewViewerID</span>(viewerID)
@@ -2667,13 +3374,13 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnPersistentDataModuleAvailable"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnPersistentDataModuleAvailable</span></h5>
 <div class="sect5">
-<h6 id="_short_description_42">Short description</h6>
+<h6 id="_short_description_56">Short description</h6>
 <div class="paragraph">
 <p>Notify status if features of CSK_PersistentData module are available.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_20">Callback arguments</h6>
+<h6 id="_callback_arguments_27">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2700,7 +3407,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_40">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_54">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnPersistentDataModuleAvailable</span>(status)
@@ -2715,13 +3422,13 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnUserLevelAdminActive"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnUserLevelAdminActive</span></h5>
 <div class="sect5">
-<h6 id="_short_description_43">Short description</h6>
+<h6 id="_short_description_57">Short description</h6>
 <div class="paragraph">
 <p>Status of Admin userlevel. Used internally in combination with the CSK_UserManagement module if available.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_21">Callback arguments</h6>
+<h6 id="_callback_arguments_28">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2748,7 +3455,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_41">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_55">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnUserLevelAdminActive</span>(status)
@@ -2763,13 +3470,13 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnUserLevelMaintenanceActive"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnUserLevelMaintenanceActive</span></h5>
 <div class="sect5">
-<h6 id="_short_description_44">Short description</h6>
+<h6 id="_short_description_58">Short description</h6>
 <div class="paragraph">
 <p>Status of Maintenance userlevel. Used internally in combination with the CSK_UserManagement module if available.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_22">Callback arguments</h6>
+<h6 id="_callback_arguments_29">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2796,7 +3503,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_42">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_56">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnUserLevelMaintenanceActive</span>(status)
@@ -2811,13 +3518,13 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnUserLevelOperatorActive"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnUserLevelOperatorActive</span></h5>
 <div class="sect5">
-<h6 id="_short_description_45">Short description</h6>
+<h6 id="_short_description_59">Short description</h6>
 <div class="paragraph">
 <p>Status of Operator userlevel. Used internally in combination with the CSK_UserManagement module if available.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_23">Callback arguments</h6>
+<h6 id="_callback_arguments_30">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2844,7 +3551,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_43">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_57">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnUserLevelOperatorActive</span>(status)
@@ -2859,13 +3566,13 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div class="sect4">
 <h5 id="API:Event:CSK_MultiImageFilter.OnUserLevelServiceActive"><span class="breadcrumb">CSK_MultiImageFilter.</span><span class="api-event">OnUserLevelServiceActive</span></h5>
 <div class="sect5">
-<h6 id="_short_description_46">Short description</h6>
+<h6 id="_short_description_60">Short description</h6>
 <div class="paragraph">
 <p>Status of Service userlevel. Used internally in combination with the CSK_UserManagement module if available.</p>
 </div>
 </div>
 <div class="sect5">
-<h6 id="_callback_arguments_24">Callback arguments</h6>
+<h6 id="_callback_arguments_31">Callback arguments</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2892,7 +3599,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 </table>
 </div>
 <div class="sect5">
-<h6 id="_sample_auto_generated_44">Sample (auto-generated)</h6>
+<h6 id="_sample_auto_generated_58">Sample (auto-generated)</h6>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="lua"><span class="keyword">function</span> <span class="function">handleOnUserLevelServiceActive</span>(status)
@@ -2953,17 +3660,22 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <tr>
 <td class="tableblock halign-left valign-top"><div class="literal"><pre>Canny</pre></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Canny</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Canny filter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Canny filter.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="literal"><pre>Blur</pre></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Blur</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Blur filter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blur filter.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="literal"><pre>Crop</pre></div></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Crop</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Crop image.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="literal"><pre>Transform</pre></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transform</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transform image.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2974,7 +3686,7 @@ Script.register(<span class="string"><span class="delimiter">&quot;</span><span 
 <div id="footer">
 <div id="footer-text">
 Version 0.1.0<br>
-Last updated 2023-08-16 12:08:22 +0200
+Last updated 2024-01-08 15:41:38 +0100
 </div>
 </div>
 <script type="text/javascript">

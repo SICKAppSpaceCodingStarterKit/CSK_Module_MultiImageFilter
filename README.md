@@ -1,20 +1,20 @@
 # CSK_Module_MultiImageFilter
-## INFO: Draft version. Not further developed / tested so far! Check for available GitHub forks of this repository to see latest updates.
 
-Module to provide image filter processing functionality (like Blur, Canny, Crop, ...)  
+Module to provide image filter processing functionality (like Blur, Canny, Crop, Gray, Transformation).  
 
 ![plot](./docu/media/UI_Screenshot.png)
 
 ## How to Run
 
-[***...please fill with informations...***]  
-For further information check out the [documentation](https://raw.githack.com/golluroSICKAG/CSK_Module_MultiImageFilter/main/docu/CSK_Module_MultiImageFilter.html) in the folder "docu".
+The app includes an intuitive GUI.  
+For further information check out the [documentation](https://raw.githack.com/SICKAppSpaceCodingStarterKit/CSK_Module_MultiImageFilter/main/docu/CSK_Module_MultiImageFilter.html) in the folder "docu".
 
 ## Information
 
 Tested on:
-[Device] - [firmware]
-...
+|Device|Firmware|Module version
+|--|--|--|
+|SICK AppEngine|V1.5.0|V0.1.0|
 
 This application / module is part of the SICK AppSpace Coding Starter Kit developing approach.  
 It is programmed in an object oriented way. Some of the modules use kind of "classes" in Lua to make it possible to reuse code / classes in other projects.  
@@ -23,4 +23,4 @@ Please check the [documentation](https://github.com/SICKAppSpaceCodingStarterKit
 
 ## Topics
 
-Coding Starter Kit, CSK, Module, SICK-AppSpace, Image, Filter, Canny, Gray, Crop, Blur
+Coding Starter Kit, CSK, Module, SICK-AppSpace, 2D, Image, Filter, Canny, Gray, Crop, Blur, Transformation

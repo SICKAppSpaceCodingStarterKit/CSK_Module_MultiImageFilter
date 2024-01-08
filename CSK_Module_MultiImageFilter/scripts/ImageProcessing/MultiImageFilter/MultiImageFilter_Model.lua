@@ -31,13 +31,6 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.multiImageFilterInstanceNoString = tostring(self.multiImageFilterInstanceNo) -- Number of this instance as string
   self.helperFuncs = require('ImageProcessing/MultiImageFilter/helper/funcs') -- Load helper functions
 
-  -- Optionally check if specific API was loaded via
-  --[[
-  if _G.availableAPIs.specific then
-  -- ... doSomething ...
-  end
-  ]]
-
   -- Create parameters etc. for this module instance
   self.activeInUI = false -- Check if this instance is currently active in UI
 
@@ -51,10 +44,6 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   -- If available, following values will be updated from data of CSK_PersistentData module (check CSK_PersistentData module for this)
   self.parametersName = 'CSK_MultiImageFilter_Parameter' .. self.multiImageFilterInstanceNoString -- name of parameter dataset to be used for this module
   self.parameterLoadOnReboot = false -- Status if parameter dataset should be loaded on app/device reboot
-
-  --self.object = Image.create() -- Use any AppEngine CROWN
-  --self.counter = 1 -- Short docu of variable
-  --self.varA = 'value' -- Short docu of variable
 
   -- Parameters to be saved permanently if wanted
   self.parameters = {}
@@ -71,6 +60,14 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.parameters.cropPosY = 200 -- The y position of the top-left corner of the cropped image in the source image
   self.parameters.cropWidth = 150 -- The width of the cropped image
   self.parameters.cropHeight = 80 -- The height  of the cropped image
+
+  self.parameters.transformationSource = 'MANUAL' -- 'MANUAL' or 'EXTERNAL' source for transformation
+  self.parameters.transX = 0 -- Manual transformation in x direction
+  self.parameters.transY = 0 -- Manual transformation in y direction
+  self.parameters.transAngle = 0 -- Manual angle transformation
+  self.parameters.transAngleOriginX = 0 -- X origin for manual angle transformation
+  self.parameters.transAngleOriginY = 0 -- Y origin for manual angle transformation
+  self.parameters.registeredTransformationEvent = '' -- If thread internal function should react on external transformation event, define it here, e.g. 'CSK_OtherModule.OnNewTransformation'
 
   self.parameters.showImage = false -- Show image in UI
 
@@ -93,6 +90,14 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.multiImageFilterProcessingParams:add('cropPosY', self.parameters.cropPosY, "INT")
   self.multiImageFilterProcessingParams:add('cropWidth', self.parameters.cropWidth, "INT")
   self.multiImageFilterProcessingParams:add('cropHeight', self.parameters.cropHeight, "INT")
+
+  self.multiImageFilterProcessingParams:add('transformationSource', self.parameters.transformationSource, "STRING")
+  self.multiImageFilterProcessingParams:add('transX', self.parameters.transX, "INT")
+  self.multiImageFilterProcessingParams:add('transY', self.parameters.transY, "INT")
+  self.multiImageFilterProcessingParams:add('transAngle', self.parameters.transAngle, "INT")
+  self.multiImageFilterProcessingParams:add('transAngleOriginX', self.parameters.transAngleOriginX, "INT")
+  self.multiImageFilterProcessingParams:add('transAngleOriginY', self.parameters.transAngleOriginY, "INT")
+  self.multiImageFilterProcessingParams:add('registeredTransformationEvent', self.parameters.registeredTransformationEvent, "STRING")
 
   -- Handle processing
   Script.startScript(self.parameters.processingFile, self.multiImageFilterProcessingParams)

@@ -97,6 +97,9 @@
 												<davinci-option id="Option_Gray" value="Gray">
 												<span>Gray</span>
 												</davinci-option>
+                                                <davinci-option id="Option_Transfrom" value="Transform">
+												<span>Transform</span>
+												</davinci-option>
 												<crown-edpws-binding property="value"
 													name="CSK_MultiImageFilter/OnNewStatusImageFilterType"
 													update-on-resume>
@@ -215,6 +218,154 @@
 												</layout-column>
 												</layout-row>
 												</stacked-pane>
+                                                <stacked-pane id="SP_Transform" value="Transform">
+												<layout-row id="RowLayout20">
+												<layout-column id="ColumnLayout24" style="align-items: stretch">
+												<davinci-drop-down id="DD_TransformSource"
+													label="Transformation mode">
+												<davinci-option id="Option_Manual" value="MANUAL">
+												<span>MANUAL</span>
+												</davinci-option>
+												<davinci-option id="Option_External" value="EXTERNAL">
+												<span>EXTERNAL</span>
+												</davinci-option>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationSource"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationSource"
+													path="param/args/source" auto-commit>
+												</crown-binding>
+												</davinci-drop-down>
+												<stacked-view id="SV_TransformMode">
+												<stacked-pane id="SP_Manual" value="MANUAL">
+												<layout-row id="RowLayout22">
+												<layout-column id="ColumnLayout27" style="align-items: stretch">
+												<layout-row id="RowLayout24">
+												<layout-column id="ColumnLayout29" style="align-items: stretch">
+												<davinci-value-display id="VD_Angle" value="Angle">
+												</davinci-value-display>
+												<davinci-numeric-field id="TransAngle" type="outline" min="-180"
+													max="180" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationAngle"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationAngle"
+													path="param/args/angle" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout32" style="align-items: stretch">
+												<davinci-value-display id="VD_OriginX" value="X origin">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_OriginX" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationAngleOriginX"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationAngleOriginX"
+													path="param/args/xPos" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout35" style="align-items: stretch">
+												<davinci-value-display id="VD_OriginY" value="Y origin">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_OriginY" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationAngleOriginY"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationAngleOriginY"
+													path="param/args/yPos" auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												</layout-row>
+												<layout-row id="RowLayout25">
+												<layout-column id="ColumnLayout31" style="align-items: stretch">
+												<davinci-value-display id="VD_TransX" value="TransformationX">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_TransX" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationX"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationX" path="param/args/x"
+													auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout30" style="align-items: stretch">
+												<davinci-value-display id="VD_TransY" value="TransformationY">
+												</davinci-value-display>
+												<davinci-numeric-field id="NF_TransY" type="outline" min="-8000"
+													max="8000" ticks="1" group-separator="," decimal-separator="."
+													format-pattern="0">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationY"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setTransformationY" path="param/args/y"
+													auto-commit>
+												</crown-binding>
+												</davinci-numeric-field>
+												</layout-column>
+												<layout-column id="ColumnLayout34" style="align-items: stretch">
+												</layout-column>
+											</layout-row>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+												<stacked-pane id="SP_ExternalSource" value="EXTERNAL">
+												<layout-row id="RowLayout23">
+												<layout-column id="ColumnLayout28" style="align-items: stretch">
+												<layout-row id="RowLayout21" style="align-items: center">
+												<layout-column id="ColumnLayout25" style="align-items: stretch">
+												<davinci-value-display id="VD_TransformEvent"
+													value="Transformation event:">
+												</davinci-value-display>
+												</layout-column>
+												<layout-column id="ColumnLayout26" style="align-items: stretch">
+												<davinci-text-field id="TF_TransformEvent" type="text"
+													title="e.g. CSK_MultiImageEdgeMatcher.OnNewTransformation"
+													placeholder="e.g. CSK_MultiImageEdgeMatcher.OnNewTransformation">
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusRegisteredTransformationEvent"
+													update-on-resume>
+												</crown-edpws-binding>
+												<crown-binding event="change"
+													name="CSK_MultiImageFilter/setRegisterTransformationEvent"
+													path="param/args/event" auto-commit>
+												</crown-binding>
+												</davinci-text-field>
+												</layout-column>
+												</layout-row>
+												</layout-column>
+												</layout-row>
+												</stacked-pane>
+												<crown-edpws-binding property="value"
+													name="CSK_MultiImageFilter/OnNewStatusTransformationSource"
+													update-on-resume>
+												</crown-edpws-binding>
+												</stacked-view>
+												</layout-column>
+											</layout-row>
+											</stacked-pane>
 												<crown-edpws-binding property="value"
 													name="CSK_MultiImageFilter/OnNewStatusImageFilterType"
 													update-on-resume>

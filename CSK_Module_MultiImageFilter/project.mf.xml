@@ -21,9 +21,10 @@ INFO: It is possible to combine multiple filters / instances by adding instances
             <enum name="ImageFilter" trait="released">
                 <desc>Available image filter.</desc>
                 <item desc="Convert RGB image to gray image." name="Gray">Gray</item>
-                <item desc="Canny filter" name="Canny">Canny</item>
-                <item desc="Blur filter" name="Blur">Blur</item>
+                <item desc="Canny filter." name="Canny">Canny</item>
+                <item desc="Blur filter." name="Blur">Blur</item>
                 <item desc="Crop image." name="Crop">Crop</item>
+                <item desc="Transform image." name="Transform">Transform</item>
             </enum>
             <serves>
                 <event name="OnNewStatusLoadParameterOnReboot">
@@ -136,6 +137,34 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
                     <desc>Notify height of cropped image.</desc>
                     <param desc="The height of the cropped image." multiplicity="1" name="height" type="int"/>
                 </event>
+                <event name="OnNewStatusRegisteredTransformationEvent">
+                    <desc>Notify event to receive transformation data to align image.</desc>
+                    <param desc="Name of event." multiplicity="1" name="eventName" type="string"/>
+                </event>
+                <event name="OnNewStatusTransformationSource">
+                    <desc>Notify source for transformation data.</desc>
+                    <param desc="Mode" multiplicity="1" name="mode" type="string"/>
+                </event>
+                <event name="OnNewStatusTransformationX">
+                    <desc>Notify manual transformation in x direction.</desc>
+                    <param desc="Transformation in x direction." multiplicity="1" name="xTrans" type="int"/>
+                </event>
+                <event name="OnNewStatusTransformationY">
+                    <desc>Notify manual transformation in y direction.</desc>
+                    <param desc="Transformation in y direction." multiplicity="1" name="yTrans" type="int"/>
+                </event>
+                <event name="OnNewStatusTransformationAngle">
+                    <desc>Notify manual transformation angle.</desc>
+                    <param desc="Transformation angle." multiplicity="1" name="angle" type="int"/>
+                </event>
+                <event name="OnNewStatusTransformationAngleOriginX">
+                    <desc>Notify transformation angle origin x position.</desc>
+                    <param desc="x position" multiplicity="1" name="xPos" type="int"/>
+                </event>
+                <event name="OnNewStatusTransformationAngleOriginY">
+                    <desc>Notify transformation angle origin y position.</desc>
+                    <param desc="y position" multiplicity="1" name="yPos" type="int"/>
+                </event>
                 <function name="setParameterName">
                     <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
                     <param desc="Name of the parameter" multiplicity="1" name="name" type="string"/>
@@ -173,6 +202,7 @@ NUM will be replaced by the number of instance (e.g. "processInstance1"). +
 INFO: Other modules can check via "Script.isServedAsFunction" if function of sepecific instance exists. +
 Needs then to be called via "Script.callFunction".</desc>
                     <param alias="Alias" desc="Transferred object (optional)" multiplicity="?" name="object" type="object"/>
+                    <param alias="Container" desc="Optional transformation data (xTrans, yTrans)" multiplicity="?" name="translation" type="object"/>
                     <return desc="Processing result (optional)." multiplicity="?" name="result" type="bool"/>
                 </function>
                 <function name="addInstance">
@@ -213,6 +243,34 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                 <function name="setCropHeight">
                     <desc>Function to set height of cropped image.</desc>
                     <param desc="The height of the cropped image." multiplicity="1" name="height" type="int"/>
+                </function>
+                <function name="setRegisterTransformationEvent">
+                    <desc>Function to set event to receive transformation data to align image.</desc>
+                    <param desc="Event (needs to provide translation data as 'Transform' object)." multiplicity="1" name="event" type="string"/>
+                </function>
+                <function name="setTransformationSource">
+                    <desc>Function to set source of transformation data.</desc>
+                    <param desc="Source" multiplicity="1" name="source" type="string"/>
+                </function>
+                <function name="setTransformationX">
+                    <desc>Functin to set manual transformation in x direction.</desc>
+                    <param desc="Translation in x direction." multiplicity="1" name="x" type="int"/>
+                </function>
+                <function name="setTransformationY">
+                    <desc>Functin to set manual transformation in y direction.</desc>
+                    <param desc="Translation in y direction." multiplicity="1" name="y" type="int"/>
+                </function>
+                <function name="setTransformationAngle">
+                    <desc>Functin to set manual transformation angle.</desc>
+                    <param desc="Transformation angle in degree between -180 and +180." multiplicity="1" name="angle" type="int"/>
+                </function>
+                <function name="setTransformationAngleOriginX">
+                    <desc>Function to set xPos of origin for manual angle transformation.</desc>
+                    <param desc="x position" multiplicity="1" name="xPos" type="int"/>
+                </function>
+                <function name="setTransformationAngleOriginY">
+                    <desc>Function to set yPos of origin for manual angle transformation.</desc>
+                    <param desc="y position" multiplicity="1" name="yPos" type="int"/>
                 </function>
             </serves>
         </crown>

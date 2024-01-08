@@ -17,7 +17,9 @@ local function loadAPIs()
   Log.Handler = require 'API.Log.Handler'
   Log.SharedLogger = require 'API.Log.SharedLogger'
   Object = require 'API.Object'
+  Point = require 'API.Point'
   Timer = require 'API.Timer'
+  Transform = require 'API.Transform'
   View = require 'API.View'
 
   -- Check if related CSK modules are available to be used
