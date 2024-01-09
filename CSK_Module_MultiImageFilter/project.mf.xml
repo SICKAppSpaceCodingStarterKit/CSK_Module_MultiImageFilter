@@ -26,6 +26,11 @@ INFO: It is possible to combine multiple filters / instances by adding instances
                 <item desc="Crop image." name="Crop">Crop</item>
                 <item desc="Transform image." name="Transform">Transform</item>
             </enum>
+            <enum name="TransformationSource" trait="released">
+                <desc>Source for transformation data.</desc>
+                <item desc="Manually set config to transform image." name="MANUAL">MANUAL</item>
+                <item desc="Receive config to transform image from external source via event." name="EXTERNAL">EXTERNAL</item>
+            </enum>
             <serves>
                 <event name="OnNewStatusLoadParameterOnReboot">
                     <desc>Notify status if parameters should be loaded on app/device boot up.</desc>
@@ -250,7 +255,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                 </function>
                 <function name="setTransformationSource">
                     <desc>Function to set source of transformation data.</desc>
-                    <param desc="Source" multiplicity="1" name="source" type="string"/>
+                    <param desc="Source" multiplicity="1" name="source" ref="CSK_MultiImageFilter.TransformationSource" type="enum"/>
                 </function>
                 <function name="setTransformationX">
                     <desc>Functin to set manual transformation in x direction.</desc>
