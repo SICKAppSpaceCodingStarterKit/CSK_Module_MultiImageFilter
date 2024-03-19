@@ -2,7 +2,7 @@
 
 -- If App property "LuaLoadAllEngineAPI" is FALSE, use this to load and check for required APIs
 -- This can improve performance of garbage collection
--- local availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- check for available APIs
+local availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- check for available APIs
 -----------------------------------------------------------
 local nameOfModule = 'CSK_MultiImageFilter'
 --Logger
@@ -12,12 +12,12 @@ local scriptParams = Script.getStartArgument() -- Get parameters from model
 
 local multiImageFilterInstanceNumber = scriptParams:get('multiImageFilterInstanceNumber') -- number of this instance
 local multiImageFilterInstanceNumberString = tostring(multiImageFilterInstanceNumber) -- number of this instance as string
---local viewerId = scriptParams:get('viewerId')
---local viewer = View.create(viewerId) --> if needed
--- e.g. local object = MachineLearning.DeepNeuralNetwork.create() -- Use any AppEngine CROWN needed
+local viewerId = scriptParams:get('viewerId')
+local viewer = View.create(viewerId)
+local tempImage = nil
 
 -- Event to notify result of processing
-Script.serveEvent("CSK_MultiImageFilter.OnNewResult" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewResult" .. multiImageFilterInstanceNumberString, 'bool') -- Edit this accordingly
+Script.serveEvent("CSK_MultiImageFilter.OnNewImage" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewImage" .. multiImageFilterInstanceNumberString, 'object:?:Image') -- Edit this accordingly
 -- Event to forward content from this thread to Controller to show e.g. on UI
 Script.serveEvent("CSK_MultiImageFilter.OnNewValueToForward".. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, 'string, auto')
 -- Event to forward update of e.g. parameter update to keep data in sync between threads
@@ -26,50 +26,74 @@ Script.serveEvent("CSK_MultiImageFilter.OnNewValueUpdate" .. multiImageFilterIns
 local processingParams = {}
 processingParams.registeredEvent = scriptParams:get('registeredEvent')
 processingParams.activeInUI = false
---processingParams.showImage = scriptParams:get('showImage') -- if needed
+processingParams.showImage = scriptParams:get('showImage')
 
--- optionally
---[[
-local function setAllProcessingParameters(paramContainer)
-  processingParams.paramA = paramContainer:get('paramA')
-  processingParams.paramB = paramContainer:get('paramB')
-  processingParams.selectedObject = paramContainer:get('selectedObject')
+processingParams.filterType = scriptParams:get('filterType')
 
-  -- ...
+processingParams.blurKernelSizePix = scriptParams:get('blurKernelSizePix')
 
-  processingParams.internalObjects = helperFuncs.convertContainer2Table(paramContainer:get('internalObjects'))
+processingParams.cannyThresholdLow = scriptParams:get('cannyThresholdLow')
+processingParams.cannyThresholdHigh = scriptParams:get('cannyThresholdHigh')
 
-end
-setAllProcessingParameters(scriptParams)
-]]
+processingParams.cropPosX = scriptParams:get('cropPosX')
+processingParams.cropPosY = scriptParams:get('cropPosY')
+processingParams.cropWidth = scriptParams:get('cropWidth')
+processingParams.cropHeight = scriptParams:get('cropHeight')
 
-local function handleOnNewProcessing(object)
+processingParams.transformationSource = scriptParams:get('transformationSource')
+processingParams.transX = scriptParams:get('transX')
+processingParams.transY = scriptParams:get('transY')
+processingParams.transAngle = scriptParams:get('transAngle')
+processingParams.transAngleOriginX = scriptParams:get('transAngleOriginX')
+processingParams.transAngleOriginY = scriptParams:get('transAngleOriginY')
+processingParams.transAngleOrigin = Point.create(processingParams.transAngleOriginX, processingParams.transAngleOriginY)
+processingParams.registeredTransformationEvent = scriptParams:get('registeredTransformationEvent')
+processingParams.transform = Transform.createRigid2D(math.rad(processingParams.transAngle), processingParams.transX, processingParams.transY, processingParams.transAngleOrigin)
 
-  _G.logger:info(nameOfModule .. ": Check object on instance No." .. multiImageFilterInstanceNumberString)
+local function handleOnNewProcessing(img, translation)
 
-  -- Insert processing part
-  -- E.g.
-  --[[
+  _G.logger:fine(nameOfModule .. ": Check object on instance No." .. multiImageFilterInstanceNumberString)
 
-  local result = someProcessingFunctions(object)
+  local resultImage
 
-  Script.notifyEvent("MultiImageFilter_OnNewValueUpdate" .. multiImageFilterInstanceNumberString, multiImageFilterInstanceNumber, 'valueName', result, processingParams.selectedObject)
-
-  if processingParams.showImage and processingParams.activeInUI then
-    viewer:addImage(image)
-    viewer:present("LIVE")
+  if processingParams.filterType == 'Gray' then
+    resultImage = Image.toGray(img)
+  elseif processingParams.filterType == 'Canny' then
+    resultImage = Image.canny(img, processingParams.cannyThresholdHigh, processingParams.cannyThresholdLow)
+  elseif processingParams.filterType == 'Blur' then
+    resultImage = Image.blur(img, processingParams.blurKernelSizePix)
+  elseif processingParams.filterType == 'Crop' then
+    resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+  elseif processingParams.filterType == 'Transform' then
+    if processingParams.transformationSource == 'MANUAL' then
+      resultImage = Image.transform(img, processingParams.transform)
+    elseif processingParams.transformationSource == 'EXTERNAL' then
+      if img then
+        tempImage = img
+        return
+      elseif translation and tempImage then
+        resultImage = Image.transform(tempImage, translation)
+        Script.releaseObject(tempImage)
+        tempImage = nil
+      end
+    end
   end
-  ]]
 
-  --_G.logger:info(nameOfModule .. ": Processing on MultiImageFilter" .. multiImageFilterInstanceNumberString .. " was = " .. tostring(result))
-  --Script.notifyEvent('MultiImageFilter_OnNewResult'.. multiImageFilterInstanceNumberString, true)
-
-  --Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, 'MultiColorSelection_CustomEventName', 'content')
-
-  Script.releaseObject(object)
+  if resultImage then
+    if processingParams.showImage and processingParams.activeInUI then
+      viewer:addImage(resultImage)
+      viewer:present("LIVE")
+    end
+    Script.notifyEvent('MultiImageFilter_OnNewImage'.. multiImageFilterInstanceNumberString, resultImage)
+  end
 
 end
 Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Alias', 'bool:?') -- Edit this according to this function
+
+-- Function to use transformation data on presaved image
+local function handleOnNewTransformationProcessing(trans)
+  handleOnNewProcessing(nil, trans)
+end
 
 --- Function to handle updates of processing parameters from Controller
 ---@param multiImageFilterNo int Number of instance to update
@@ -79,46 +103,51 @@ Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterIns
 local function handleOnNewProcessingParameter(multiImageFilterNo, parameter, value, internalObjectNo)
 
   if multiImageFilterNo == multiImageFilterInstanceNumber then -- set parameter only in selected script
-    _G.logger:info(nameOfModule .. ": Update parameter '" .. parameter .. "' of multiImageFilterInstanceNo." .. tostring(multiImageFilterNo) .. " to value = " .. tostring(value))
-
-    --[[
-    if internalObjectNo then
-      _G.logger:info(nameOfModule .. ": Update parameter '" .. parameter .. "' of multiImageFilterInstanceNo." .. tostring(multiImageFilterNo) .. " of internalObject No." .. tostring(internalObjectNo) .. " to value = " .. tostring(value))
-      processingParams.internalObjects[internalObjectNo][parameter] = value
-
-    elseif parameter == 'FullSetup' then
-      if type(value) == 'userdata' then
-        if Object.getType(value) == 'Container' then
-            setAllProcessingParameters(value)
-        end
-      end
-
-    -- further checks
-    --elseif parameter == 'chancelEditors' then
-    end
-
-    else
-    ]]
+    _G.logger:fine(nameOfModule .. ": Update parameter '" .. parameter .. "' of multiImageFilterInstanceNo." .. tostring(multiImageFilterNo) .. " to value = " .. tostring(value))
 
     if parameter == 'registeredEvent' then
-      _G.logger:info(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on event " .. value)
+      _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on event " .. value)
       if processingParams.registeredEvent ~= '' then
         Script.deregister(processingParams.registeredEvent, handleOnNewProcessing)
       end
       processingParams.registeredEvent = value
       Script.register(value, handleOnNewProcessing)
 
-    -- elseif parameter == 'someSpecificParameter' then
-    --   --Setting something special...
-    --   processingParams.specificVariable = value
-    --   --Do some more specific...
+    elseif parameter == 'deregisterFromEvent' then
+      _G.logger:fine(nameOfModule .. ": Deregister instance " .. multiImageFilterInstanceNumberString .. " from event")
+      Script.deregister(processingParams.registeredEvent, handleOnNewProcessing)
+      processingParams.registeredEvent = ''
 
+    elseif parameter == 'registeredTransformationEvent' then
+      if processingParams.transformationSource == 'EXTERNAL' then
+        _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on transformation event " .. value)
+        if processingParams.registeredTransformationEvent ~= '' then
+          Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
+        end
+        processingParams.registeredTransformationEvent = value
+        Script.register(value, handleOnNewTransformationProcessing)
+      else
+        _G.logger:fine(nameOfModule .. ": First set transformation source to 'EXTERNAL'.")
+      end
+
+    elseif parameter == 'transformationSource' then
+      processingParams[parameter] = value
+      if value == 'EXTERNAL' then
+        if processingParams.registeredTransformationEvent ~= '' then
+          Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
+          _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on transformation event " .. tostring(processingParams.registeredTransformationEvent))
+          Script.register(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
+        end
+      elseif value == 'MANUAL' then
+        Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
+      end
+
+    elseif parameter == 'transX' or parameter == 'transY' or parameter == 'transAngle' or parameter =='transAngleOriginX' or parameter == 'transAngleOriginY' then
+      processingParams[parameter] = value
+      processingParams.transAngleOrigin = Point.create(processingParams.transAngleOriginX, processingParams.transAngleOriginY)
+      processingParams.transform = Transform.createRigid2D(math.rad(processingParams.transAngle), processingParams.transX, processingParams.transY, processingParams.transAngleOrigin)
     else
       processingParams[parameter] = value
-      --if  parameter == 'showImage' and value == false then
-      --  viewer:clear()
-      --  viewer:present()
-      --end
     end
   elseif parameter == 'activeInUI' then
     processingParams[parameter] = false
