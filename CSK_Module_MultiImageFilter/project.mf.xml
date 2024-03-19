@@ -49,7 +49,7 @@ INFO: It is possible to combine multiple filters / instances by adding instances
                     <param desc="Number of the instance to receive the parameter." multiplicity="1" name="objectNo" type="int"/>
                     <param desc="Name of the parameter." multiplicity="1" name="parameter" type="string"/>
                     <param desc="Value of the parameter." multiplicity="1" name="value" type="auto"/>
-                    <param desc="If parameter is for specifici internal used object, its number." multiplicity="?" name="internalObjectNo" type="int"/>
+                    <param desc="If parameter is for specific internal used object, its number." multiplicity="?" name="internalObjectNo" type="int"/>
                 </event>
                 <event name="OnNewSelectedInstance">
                     <desc>Notify if new instance is selected.</desc>
@@ -219,7 +219,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                 </function>
                 <function name="setFilterType">
                     <desc>Function to set filter type.</desc>
-                    <param desc="Filter type." multiplicity="1" name="filterType" type="enum"/>
+                    <param desc="Filter type." multiplicity="1" name="filterType" ref="CSK_MultiImageFilter.ImageFilter" type="enum"/>
                 </function>
                 <function name="setShowImage">
                     <desc>Function to select if image should be shown on UI.</desc>
