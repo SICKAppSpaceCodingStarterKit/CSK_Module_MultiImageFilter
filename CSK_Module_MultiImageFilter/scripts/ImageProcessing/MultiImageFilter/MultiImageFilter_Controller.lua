@@ -255,6 +255,8 @@ local function addInstance()
   table.insert(multiImageFilter_Instances, multiImageFilter_Model.create(#multiImageFilter_Instances+1))
   Script.deregister("CSK_MultiImageFilter.OnNewValueToForward" .. tostring(#multiImageFilter_Instances) , handleOnNewValueToForward)
   Script.register("CSK_MultiImageFilter.OnNewValueToForward" .. tostring(#multiImageFilter_Instances) , handleOnNewValueToForward)
+  Script.deregister("CSK_MultiImageFilter.OnNewValueUpdate" .. tostring(#multiImageFilter_Instances) , handleOnNewValueUpdate)
+  Script.register("CSK_MultiImageFilter.OnNewValueUpdate" .. tostring(#multiImageFilter_Instances) , handleOnNewValueUpdate)
   handleOnExpiredTmrMultiImageFilter()
 end
 Script.serveFunction('CSK_MultiImageFilter.addInstance', addInstance)
