@@ -11,9 +11,12 @@ For further information check out the [documentation](https://raw.githack.com/SI
 
 ## Information
 
-Tested on:
+Tested on  
+
 |Device|Firmware|Module version
 |--|--|--|
+|SIM1012|V2.4.2|V2.0.0|
+|SICK AppEngine|V1.7.0|V2.0.0|
 |SICK AppEngine|V1.5.0|V1.0.0|
 
 This application / module is part of the SICK AppSpace Coding Starter Kit developing approach.  

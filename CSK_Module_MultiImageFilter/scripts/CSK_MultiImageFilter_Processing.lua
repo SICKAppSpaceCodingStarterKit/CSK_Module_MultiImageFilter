@@ -35,10 +35,12 @@ processingParams.blurKernelSizePix = scriptParams:get('blurKernelSizePix')
 processingParams.cannyThresholdLow = scriptParams:get('cannyThresholdLow')
 processingParams.cannyThresholdHigh = scriptParams:get('cannyThresholdHigh')
 
+processingParams.cropPositionSource = scriptParams:get('cropPositionSource')
 processingParams.cropPosX = scriptParams:get('cropPosX')
 processingParams.cropPosY = scriptParams:get('cropPosY')
 processingParams.cropWidth = scriptParams:get('cropWidth')
 processingParams.cropHeight = scriptParams:get('cropHeight')
+processingParams.registeredCropPositionEvent = scriptParams:get('registeredCropPositionEvent')
 
 processingParams.transformationSource = scriptParams:get('transformationSource')
 processingParams.transX = scriptParams:get('transX')
@@ -63,7 +65,29 @@ local function handleOnNewProcessing(img, translation)
   elseif processingParams.filterType == 'Blur' then
     resultImage = Image.blur(img, processingParams.blurKernelSizePix)
   elseif processingParams.filterType == 'Crop' then
-    resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+    if processingParams.cropPositionSource == 'MANUAL' then
+      resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+    elseif processingParams.cropPositionSource == 'EXTERNAL' then
+      if img then
+        tempImage = img
+        return
+      elseif translation and tempImage then
+        local singlePose
+        if type(translation) == 'table' then
+          singlePose = translation[1]
+        else
+          singlePose = translation
+        end
+
+        if type(singlePose) == 'userdata' then
+          local _, posX, posY = Transform.decomposeRigid2D(singlePose)
+          resultImage = Image.crop(tempImage, posX + processingParams.cropPosX, posY+processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+        end
+        Script.releaseObject(tempImage)
+        tempImage = nil
+      end
+    end
+
   elseif processingParams.filterType == 'Transform' then
     if processingParams.transformationSource == 'MANUAL' then
       resultImage = Image.transform(img, processingParams.transform)
@@ -72,7 +96,21 @@ local function handleOnNewProcessing(img, translation)
         tempImage = img
         return
       elseif translation and tempImage then
-        resultImage = Image.transform(tempImage, translation)
+
+        local singlePose
+        if type(translation) == 'table' then
+          singlePose = translation[1]
+        else
+          singlePose = translation
+        end
+
+        if type(singlePose) == 'userdata' then
+          local transPose = singlePose:invert()
+          local movedPose = Transform.translate2D(transPose, 0,0)
+          local fullTrans = Transform.compose(movedPose, processingParams.transform)
+          resultImage = Image.transform(tempImage, fullTrans)
+        end
+
         Script.releaseObject(tempImage)
         tempImage = nil
       end
@@ -92,6 +130,11 @@ Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterIns
 
 -- Function to use transformation data on presaved image
 local function handleOnNewTransformationProcessing(trans)
+  handleOnNewProcessing(nil, trans)
+end
+
+-- Function to use transformation data on presaved image to crop image
+local function handleOnNewCropProcessing(trans)
   handleOnNewProcessing(nil, trans)
 end
 
@@ -119,15 +162,15 @@ local function handleOnNewProcessingParameter(multiImageFilterNo, parameter, val
       processingParams.registeredEvent = ''
 
     elseif parameter == 'registeredTransformationEvent' then
+      if processingParams.registeredTransformationEvent ~= '' then
+        Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
+      end
+      processingParams.registeredTransformationEvent = value
       if processingParams.transformationSource == 'EXTERNAL' then
         _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on transformation event " .. value)
-        if processingParams.registeredTransformationEvent ~= '' then
-          Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
-        end
-        processingParams.registeredTransformationEvent = value
         Script.register(value, handleOnNewTransformationProcessing)
       else
-        _G.logger:fine(nameOfModule .. ": First set transformation source to 'EXTERNAL'.")
+        _G.logger:info(nameOfModule .. ": First set transformation source to 'EXTERNAL'.")
       end
 
     elseif parameter == 'transformationSource' then
@@ -141,6 +184,30 @@ local function handleOnNewProcessingParameter(multiImageFilterNo, parameter, val
       elseif value == 'MANUAL' then
         Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
       end
+
+      elseif parameter == 'registeredCropPositionEvent' then
+        if processingParams.cropPositionSource == 'EXTERNAL' then
+          _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on crop event " .. value)
+          if processingParams.registeredCropPositionEvent ~= '' then
+            Script.deregister(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+          end
+          processingParams.registeredCropPositionEvent = value
+          Script.register(value, handleOnNewCropProcessing)
+        else
+          _G.logger:fine(nameOfModule .. ": First set crop source to 'EXTERNAL'.")
+        end
+
+      elseif parameter == 'cropPositionSource' then
+        processingParams[parameter] = value
+        if value == 'EXTERNAL' then
+          if processingParams.registeredCropPositionEvent ~= '' then
+            Script.deregister(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+            _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on crop event " .. tostring(processingParams.registeredCropPositionEvent))
+            Script.register(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+          end
+        elseif value == 'MANUAL' then
+          Script.deregister(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+        end
 
     elseif parameter == 'transX' or parameter == 'transY' or parameter == 'transAngle' or parameter =='transAngleOriginX' or parameter == 'transAngleOriginY' then
       processingParams[parameter] = value

@@ -13,11 +13,21 @@ local nameOfModule = 'CSK_MultiImageFilter'
 local multiImageFilter = {}
 multiImageFilter.__index = multiImageFilter
 
+multiImageFilter.styleForUI = 'None' -- Optional parameter to set UI style
+multiImageFilter.version = Engine.getCurrentAppVersion() -- Version of module
+
 --**************************************************************************
 --********************** End Global Scope **********************************
 --**************************************************************************
 --**********************Start Function Scope *******************************
 --**************************************************************************
+
+--- Function to react on UI style change
+local function handleOnStyleChanged(theme)
+  multiImageFilter.styleForUI = theme
+  Script.notifyEvent("MultiImageFilter_OnNewStatusCSKStyle", multiImageFilter.styleForUI)
+end
+Script.register('CSK_PersistentData.OnNewStatusCSKStyle', handleOnStyleChanged)
 
 --- Function to create new instance
 ---@param multiImageFilterInstanceNo int Number of instance
@@ -47,6 +57,7 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
 
   -- Parameters to be saved permanently if wanted
   self.parameters = {}
+  self.parameters.flowConfigPriority = CSK_FlowConfig ~= nil or false -- Status if FlowConfig should have priority for FlowConfig relevant configurations
   self.parameters.registeredEvent = '' -- If thread internal function should react on external event, define it here, e.g. 'CSK_OtherModule.OnNewInput'
   self.parameters.processingFile = 'CSK_MultiImageFilter_Processing' -- which file to use for processing (will be started in own thread)
   self.parameters.filterType = 'Gray' -- Type of filter to use
@@ -56,10 +67,12 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
 
   self.parameters.blurKernelSizePix = 15 -- Size of the kernel
 
-  self.parameters.cropPosX = 267 -- The x position of the top-left corner of the cropped image in the source image
-  self.parameters.cropPosY = 200 -- The y position of the top-left corner of the cropped image in the source image
+  self.parameters.cropPositionSource = 'MANUAL' -- 'MANUAL' or 'EXTERNAL' source for cropping
+  self.parameters.cropPosX = 267 -- The x position of the top-left corner of the cropped image in the source image (MANUAL MODE)
+  self.parameters.cropPosY = 200 -- The y position of the top-left corner of the cropped image in the source image (MANUAL MODE)
   self.parameters.cropWidth = 150 -- The width of the cropped image
   self.parameters.cropHeight = 80 -- The height  of the cropped image
+  self.parameters.registeredCropPositionEvent = '' -- If thread internal function should react on external transformation event, define it here, e.g. 'CSK_OtherModule.OnNewTransformation'
 
   self.parameters.transformationSource = 'MANUAL' -- 'MANUAL' or 'EXTERNAL' source for transformation
   self.parameters.transX = 0 -- Manual transformation in x direction
@@ -86,10 +99,12 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.multiImageFilterProcessingParams:add('cannyThresholdLow', self.parameters.cannyThresholdLow, "INT")
   self.multiImageFilterProcessingParams:add('cannyThresholdHigh', self.parameters.cannyThresholdHigh, "INT")
 
+  self.multiImageFilterProcessingParams:add('cropPositionSource', self.parameters.cropPositionSource, "STRING")
   self.multiImageFilterProcessingParams:add('cropPosX', self.parameters.cropPosX, "INT")
   self.multiImageFilterProcessingParams:add('cropPosY', self.parameters.cropPosY, "INT")
   self.multiImageFilterProcessingParams:add('cropWidth', self.parameters.cropWidth, "INT")
   self.multiImageFilterProcessingParams:add('cropHeight', self.parameters.cropHeight, "INT")
+  self.multiImageFilterProcessingParams:add('registeredCropPositionEvent', self.parameters.registeredCropPositionEvent, "STRING")
 
   self.multiImageFilterProcessingParams:add('transformationSource', self.parameters.transformationSource, "STRING")
   self.multiImageFilterProcessingParams:add('transX', self.parameters.transX, "INT")
