@@ -13,7 +13,7 @@ For further information check out the [documentation](https://raw.githack.com/SI
 
 Tested on  
 
-|Device|Firmware|Module version
+|Device|Firmware|Module version|
 |--|--|--|
 |SIM1012|V2.4.2|V2.0.0|
 |SICK AppEngine|V1.7.0|V2.0.0|

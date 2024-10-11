@@ -194,6 +194,10 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
                     <desc>Notify event to receive transformation data to crop specific part in image.</desc>
                     <param desc="Name of event." multiplicity="1" name="eventName" type="string"/>
                 </event>
+                <event name="OnNewStatusUIMessage">
+                    <desc>Notfiy message to show in UI.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="string"/>
+                </event>
                 <function name="setParameterName">
                     <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
                     <param desc="Name of the parameter" multiplicity="1" name="name" type="string"/>
@@ -342,7 +346,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                 <serves>
                     <function name="create">
                         <desc>Internally used CSK_FlowConfig create function.</desc>
-                        <param desc="Numeric identifier of processing instance (must be &gt;=1)." multiplicity="1" name="Instance" type="int"/>
+                        <param constraint="1-99" desc="Numeric identifier of processing instance." multiplicity="1" name="Instance" type="int"/>
                         <return desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
                     </function>
                     <function name="imageSource">
@@ -367,7 +371,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                     <function name="create">
                         <trait>released</trait>
                         <desc>Internally used CSK_FlowConfig create function.</desc>
-                        <param desc="Numeric identifier of processing instance (must be &gt;=1)." multiplicity="1" name="Instance" type="int"/>
+                        <param constraint="1-99" desc="Numeric identifier of processing instance." multiplicity="1" name="Instance" type="int"/>
                         <return desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
                     </function>
                     <function name="register">
@@ -385,7 +389,7 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                 <serves>
                     <function name="create">
                         <desc>Internally used CSK_FlowConfig create function.</desc>
-                        <param desc="Number of processing instance." multiplicity="1" name="Instance" type="int"/>
+                        <param constraint="1-99" desc="Number of processing instance." multiplicity="1" name="Instance" type="int"/>
                         <return desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
                     </function>
                     <function name="process">

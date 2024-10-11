@@ -61,9 +61,25 @@ local function handleOnNewProcessing(img, translation)
   if processingParams.filterType == 'Gray' then
     resultImage = Image.toGray(img)
   elseif processingParams.filterType == 'Canny' then
-    resultImage = Image.canny(img, processingParams.cannyThresholdHigh, processingParams.cannyThresholdLow)
+    local imgType = Image.getType(img)
+    if imgType == 'UINT8' then
+      resultImage = Image.canny(img, processingParams.cannyThresholdHigh, processingParams.cannyThresholdLow)
+    else
+      _G.logger:warning(nameOfModule .. ": Canny filter on instance No." .. multiImageFilterInstanceNumberString .. " only supports UINT8 images.")
+      if processingParams.activeInUI then
+        Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewStatusUIMessage", 'LOG')
+      end
+    end
   elseif processingParams.filterType == 'Blur' then
-    resultImage = Image.blur(img, processingParams.blurKernelSizePix)
+    local imgType = Image.getType(img)
+    if imgType ~= 'RGB24' then
+      resultImage = Image.blur(img, processingParams.blurKernelSizePix)
+    else
+      _G.logger:warning(nameOfModule .. ": Blur filter on instance No." .. multiImageFilterInstanceNumberString .. " does not supports RGB images.")
+      if processingParams.activeInUI then
+        Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewStatusUIMessage", 'LOG')
+      end
+    end
   elseif processingParams.filterType == 'Crop' then
     if processingParams.cropPositionSource == 'MANUAL' then
       resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
@@ -126,16 +142,25 @@ local function handleOnNewProcessing(img, translation)
   end
 
 end
-Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Alias', 'bool:?') -- Edit this according to this function
+Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Image,object:?*:Transform', 'bool:?') -- Edit this according to this function
 
 -- Function to use transformation data on presaved image
+---@param trans Transfrom Transformation to transform image
 local function handleOnNewTransformationProcessing(trans)
   handleOnNewProcessing(nil, trans)
 end
 
 -- Function to use transformation data on presaved image to crop image
+---@param trans Transfrom Transformation to use for cropping image
 local function handleOnNewCropProcessing(trans)
   handleOnNewProcessing(nil, trans)
+end
+
+--- Function only used to forward the content from events to the served function.
+--- This is only needed, as deregistering from the event would internally release the served function and would make it uncallable from external.
+---@param image Image Image to process
+local function tempHandleOnNewProcessing(image)
+  handleOnNewProcessing(image)
 end
 
 --- Function to handle updates of processing parameters from Controller
@@ -151,14 +176,14 @@ local function handleOnNewProcessingParameter(multiImageFilterNo, parameter, val
     if parameter == 'registeredEvent' then
       _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on event " .. value)
       if processingParams.registeredEvent ~= '' then
-        Script.deregister(processingParams.registeredEvent, handleOnNewProcessing)
+        Script.deregister(processingParams.registeredEvent, tempHandleOnNewProcessing)
       end
       processingParams.registeredEvent = value
-      Script.register(value, handleOnNewProcessing)
+      Script.register(value, tempHandleOnNewProcessing)
 
     elseif parameter == 'deregisterFromEvent' then
       _G.logger:fine(nameOfModule .. ": Deregister instance " .. multiImageFilterInstanceNumberString .. " from event")
-      Script.deregister(processingParams.registeredEvent, handleOnNewProcessing)
+      Script.deregister(processingParams.registeredEvent, tempHandleOnNewProcessing)
       processingParams.registeredEvent = ''
 
     elseif parameter == 'registeredTransformationEvent' then

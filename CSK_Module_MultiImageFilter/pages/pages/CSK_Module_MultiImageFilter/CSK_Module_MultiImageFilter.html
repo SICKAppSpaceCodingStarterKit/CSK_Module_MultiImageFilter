@@ -239,6 +239,18 @@
                             <layout-column id="ColumnLayout1"
                                 class="myCustomMarginInline1Rem_CSK_Module_MultiImageFilter"
                                 style="align-items: stretch">
+                                <stacked-view id="SV_UIMessage">
+                                    <stacked-pane id="SP_LOG" value="LOG">
+                                        <davinci-callout id="Callout_Log" type="warning">
+                                            <span>Please check log messages...</span>
+                                        </davinci-callout>
+                                    </stacked-pane>
+                                    <stacked-pane id="SP_NoUIMessage" value="EMPTY">
+                                    </stacked-pane>
+                                    <crown-edpws-binding property="value"
+                                        name="CSK_MultiImageFilter/OnNewStatusUIMessage" update-on-resume>
+                                    </crown-edpws-binding>
+                                </stacked-view>
                                 <layout-row id="RowLayout13" style="justify-content: flex-end; align-items: center">
                                     <davinci-value-display id="VD_ShowImage" value="Viewer active">
                                     </davinci-value-display>
@@ -286,8 +298,7 @@
                                                     </layout-column>
                                                     <layout-column id="ColumnLayout15" style="align-items: stretch">
                                                         <davinci-text-field id="TF_RegisteredEvent" type="text"
-                                                            label="Registered event"
-                                                            title="e.g. CSK_ImagePlayer.OnNewImage"
+                                                            title="Process images receiving from this event, like 'CSK_ImagePlayer.OnNewImage'"
                                                             placeholder="e.g. CSK_ImagePlayer.OnNewImage">
                                                             <crown-edpws-binding property="value"
                                                                 name="CSK_MultiImageFilter/OnNewStatusRegisteredEvent"

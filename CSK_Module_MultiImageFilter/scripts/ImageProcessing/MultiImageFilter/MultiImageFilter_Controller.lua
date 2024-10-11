@@ -17,6 +17,11 @@ local tmrMultiImageFilter = Timer.create()
 tmrMultiImageFilter:setExpirationTime(300)
 tmrMultiImageFilter:setPeriodic(false)
 
+-- Timer to hide UI message after 2 seconds
+local tmrUIMessage = Timer.create()
+tmrUIMessage:setExpirationTime(5000)
+tmrUIMessage:setPeriodic(false)
+
 local multiImageFilter_Model -- Reference to model handle
 local multiImageFilter_Instances -- Reference to instances handle
 local selectedInstance = 1 -- Which instance is currently selected
@@ -41,6 +46,8 @@ Script.serveEvent("CSK_MultiImageFilter.OnNewValueUpdateNUM", "MultiImageFilter_
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusModuleVersion', 'MultiImageFilter_OnNewStatusModuleVersion')
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCSKStyle', 'MultiImageFilter_OnNewStatusCSKStyle')
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusModuleIsActive', 'MultiImageFilter_OnNewStatusModuleIsActive')
+
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusUIMessage', 'MultiImageFilter_OnNewStatusUIMessage')
 
 Script.serveEvent('CSK_MultiImageFilter.OnNewResult', 'MultiImageFilter_OnNewResult')
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusFoundMatches', 'MultiImageFilter_OnNewStatusFoundMatches')
@@ -91,6 +98,12 @@ Script.serveEvent("CSK_MultiImageFilter.OnUserLevelAdminActive", "MultiImageFilt
 --**********************Start Function Scope *******************************
 --**************************************************************************
 
+--- Function to hide UI message
+local function handleOnExpired()
+  Script.notifyEvent('MultiImageFilter_OnNewStatusUIMessage', 'EMPTY')
+end
+Timer.register(tmrUIMessage, 'OnExpired', handleOnExpired)
+
 -- Functions to forward logged in user roles via CSK_UserManagement module (if available)
 -- ***********************************************
 --- Function to react on status change of Operator user level
@@ -123,6 +136,9 @@ end
 ---@param value auto Value to forward
 local function handleOnNewValueToForward(eventname, value)
   Script.notifyEvent(eventname, value)
+  if eventname == "MultiImageFilter_OnNewStatusUIMessage" then
+    tmrUIMessage:start()
+  end
 end
 
 --- Optionally: Only use if needed for extra internal objects -  see also Model
@@ -184,7 +200,7 @@ end
 --- Function to send all relevant values to UI on resume
 local function handleOnExpiredTmrMultiImageFilter()
 
-  Script.notifyEvent("MultiImageFilter_OnNewStatusModuleVersion", multiImageFilter_Model.version)
+  Script.notifyEvent("MultiImageFilter_OnNewStatusModuleVersion", 'v' .. multiImageFilter_Model.version)
   Script.notifyEvent("MultiImageFilter_OnNewStatusCSKStyle", multiImageFilter_Model.styleForUI)
   Script.notifyEvent("MultiImageFilter_OnNewStatusModuleIsActive", _G.availableAPIs.default and _G.availableAPIs.specific)
 
@@ -194,6 +210,8 @@ local function handleOnExpiredTmrMultiImageFilter()
 
     Script.notifyEvent('MultiImageFilter_OnNewSelectedInstance', selectedInstance)
     Script.notifyEvent("MultiImageFilter_OnNewInstanceList", helperFuncs.createStringListBySize(#multiImageFilter_Instances))
+
+    Script.notifyEvent('MultiImageFilter_OnNewStatusUIMessage', 'EMPTY')
 
     Script.notifyEvent('MultiImageFilter_OnNewViewerID', 'multiImageFilterViewer' .. tostring(selectedInstance))
     Script.notifyEvent('MultiImageFilter_OnNewStatusShowImage', multiImageFilter_Instances[selectedInstance].parameters.showImage)
@@ -252,7 +270,11 @@ end
 Script.serveFunction("CSK_MultiImageFilter.setSelectedInstance", setSelectedInstance)
 
 local function getInstancesAmount ()
-  return #multiImageFilter_Instances
+  if multiImageFilter_Instances then
+    return #multiImageFilter_Instances
+  else
+    return 0
+  end
 end
 Script.serveFunction("CSK_MultiImageFilter.getInstancesAmount", getInstancesAmount)
 
