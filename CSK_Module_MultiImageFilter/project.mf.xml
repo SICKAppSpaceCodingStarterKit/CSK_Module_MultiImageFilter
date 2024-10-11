@@ -232,8 +232,8 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
 NUM will be replaced by the number of instance (e.g. "processInstance1"). +
 INFO: Other modules can check via "Script.isServedAsFunction" if function of sepecific instance exists. +
 Needs then to be called via "Script.callFunction".</desc>
-                    <param alias="Alias" desc="Transferred object (optional)" multiplicity="?" name="object" type="object"/>
-                    <param alias="Container" desc="Optional transformation data (xTrans, yTrans)" multiplicity="?" name="translation" type="object"/>
+                    <param alias="Image" desc="Image to process" multiplicity="?" name="image" type="object"/>
+                    <param alias="Transform" desc="Optional transformation data (xTrans, yTrans)" multiplicity="[?*]" name="translation" type="object"/>
                     <return desc="Processing result (optional)." multiplicity="?" name="result" type="bool"/>
                 </function>
                 <function name="addInstance">
