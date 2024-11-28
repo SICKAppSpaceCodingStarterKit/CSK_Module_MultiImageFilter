@@ -22,16 +22,13 @@
 
 ---@diagnostic disable: undefined-global, redundant-parameter, missing-parameter
 
--- 
--- CreationTemplateVersion: 3.5.0
 --**************************************************************************
 --**********************Start Global Scope *********************************
 --**************************************************************************
-
 -- If app property "LuaLoadAllEngineAPI" is FALSE, use this to load and check for required APIs
 -- This can improve performance of garbage collection
-
 _G.availableAPIs = require('ImageProcessing/MultiImageFilter/helper/checkAPIs') -- can be used to adjust function scope of the module related on available APIs of the device
+
 -----------------------------------------------------------
 -- Logger
 _G.logger = Log.SharedLogger.create('ModuleLogger')
@@ -47,12 +44,19 @@ _G.logHandle:applyConfig()
 local multiImageFilter_Model = require('ImageProcessing/MultiImageFilter/MultiImageFilter_Model')
 
 local multiImageFilter_Instances = {} -- Handle all instances
-table.insert(multiImageFilter_Instances, multiImageFilter_Model.create(1)) -- Create at least 1 instance
 
 -- Load script to communicate with the MultiImageFilter_Model UI
 -- Check / edit this script to see/edit functions which communicate with the UI
 local multiImageFilterController = require('ImageProcessing/MultiImageFilter/MultiImageFilter_Controller')
-multiImageFilterController.setMultiImageFilter_Instances_Handle(multiImageFilter_Instances) -- share handle of instances
+
+if _G.availableAPIs.default and _G.availableAPIs.specific then
+  local setInstanceHandle = require('ImageProcessing/MultiImageFilter/FlowConfig/MultiImageFilter_FlowConfig')
+  table.insert(multiImageFilter_Instances, multiImageFilter_Model.create(1)) -- Create at least 1 instance
+  multiImageFilterController.setMultiImageFilter_Instances_Handle(multiImageFilter_Instances) -- share handle of instances
+  setInstanceHandle(multiImageFilter_Instances)
+else
+  _G.logger:warning("CSK_MultiImageFilter: Relevant CROWN(s) not available on device. Module is not supported...")
+end
 
 --**************************************************************************
 --**********************End Global Scope ***********************************
@@ -108,9 +112,10 @@ local function main()
 
   ----------------------------------------------------------------------------------------
 
-  CSK_MultiImageFilter.setSelectedInstance(1)
+  if _G.availableAPIs.default and _G.availableAPIs.specific then
+    CSK_MultiImageFilter.setSelectedInstance(1)
+  end
   CSK_MultiImageFilter.pageCalled() -- Update UI
-
 end
 Script.register("Engine.OnStarted", main)
 

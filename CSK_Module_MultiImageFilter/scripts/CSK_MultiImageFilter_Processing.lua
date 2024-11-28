@@ -32,13 +32,17 @@ processingParams.filterType = scriptParams:get('filterType')
 
 processingParams.blurKernelSizePix = scriptParams:get('blurKernelSizePix')
 
+processingParams.labChannel = scriptParams:get('labChannel')
+
 processingParams.cannyThresholdLow = scriptParams:get('cannyThresholdLow')
 processingParams.cannyThresholdHigh = scriptParams:get('cannyThresholdHigh')
 
+processingParams.cropPositionSource = scriptParams:get('cropPositionSource')
 processingParams.cropPosX = scriptParams:get('cropPosX')
 processingParams.cropPosY = scriptParams:get('cropPosY')
 processingParams.cropWidth = scriptParams:get('cropWidth')
 processingParams.cropHeight = scriptParams:get('cropHeight')
+processingParams.registeredCropPositionEvent = scriptParams:get('registeredCropPositionEvent')
 
 processingParams.transformationSource = scriptParams:get('transformationSource')
 processingParams.transX = scriptParams:get('transX')
@@ -58,12 +62,66 @@ local function handleOnNewProcessing(img, translation)
 
   if processingParams.filterType == 'Gray' then
     resultImage = Image.toGray(img)
+  elseif processingParams.filterType == 'Lab' then
+    local imgType = Image.getType(img)
+    if imgType == 'RGB24' then
+      if processingParams.labChannel == 'L' then
+        resultImage = Image.toLab(img)
+      elseif processingParams.labChannel == 'a' then
+        _, resultImage = Image.toLab(img)
+      elseif processingParams.labChannel == 'b' then
+        _, __, resultImage = Image.toLab(img)
+      end
+    else
+      _G.logger:warning(nameOfModule .. ": Lab conversion on instance No." .. multiImageFilterInstanceNumberString .. " not possible. No RGB image.")
+      if processingParams.activeInUI then
+        Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewStatusUIMessage", 'LOG')
+      end
+    end
   elseif processingParams.filterType == 'Canny' then
-    resultImage = Image.canny(img, processingParams.cannyThresholdHigh, processingParams.cannyThresholdLow)
+    local imgType = Image.getType(img)
+    if imgType == 'UINT8' then
+      resultImage = Image.canny(img, processingParams.cannyThresholdHigh, processingParams.cannyThresholdLow)
+    else
+      _G.logger:warning(nameOfModule .. ": Canny filter on instance No." .. multiImageFilterInstanceNumberString .. " only supports UINT8 images.")
+      if processingParams.activeInUI then
+        Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewStatusUIMessage", 'LOG')
+      end
+    end
   elseif processingParams.filterType == 'Blur' then
-    resultImage = Image.blur(img, processingParams.blurKernelSizePix)
+    local imgType = Image.getType(img)
+    if imgType ~= 'RGB24' then
+      resultImage = Image.blur(img, processingParams.blurKernelSizePix)
+    else
+      _G.logger:warning(nameOfModule .. ": Blur filter on instance No." .. multiImageFilterInstanceNumberString .. " does not supports RGB images.")
+      if processingParams.activeInUI then
+        Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewStatusUIMessage", 'LOG')
+      end
+    end
   elseif processingParams.filterType == 'Crop' then
-    resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+    if processingParams.cropPositionSource == 'MANUAL' then
+      resultImage = Image.crop(img, processingParams.cropPosX, processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+    elseif processingParams.cropPositionSource == 'EXTERNAL' then
+      if img then
+        tempImage = img
+        return
+      elseif translation and tempImage then
+        local singlePose
+        if type(translation) == 'table' then
+          singlePose = translation[1]
+        else
+          singlePose = translation
+        end
+
+        if type(singlePose) == 'userdata' then
+          local _, posX, posY = Transform.decomposeRigid2D(singlePose)
+          resultImage = Image.crop(tempImage, posX + processingParams.cropPosX, posY+processingParams.cropPosY, processingParams.cropWidth, processingParams.cropHeight)
+        end
+        Script.releaseObject(tempImage)
+        tempImage = nil
+      end
+    end
+
   elseif processingParams.filterType == 'Transform' then
     if processingParams.transformationSource == 'MANUAL' then
       resultImage = Image.transform(img, processingParams.transform)
@@ -72,7 +130,21 @@ local function handleOnNewProcessing(img, translation)
         tempImage = img
         return
       elseif translation and tempImage then
-        resultImage = Image.transform(tempImage, translation)
+
+        local singlePose
+        if type(translation) == 'table' then
+          singlePose = translation[1]
+        else
+          singlePose = translation
+        end
+
+        if type(singlePose) == 'userdata' then
+          local transPose = singlePose:invert()
+          local movedPose = Transform.translate2D(transPose, 0,0)
+          local fullTrans = Transform.compose(movedPose, processingParams.transform)
+          resultImage = Image.transform(tempImage, fullTrans)
+        end
+
         Script.releaseObject(tempImage)
         tempImage = nil
       end
@@ -88,11 +160,25 @@ local function handleOnNewProcessing(img, translation)
   end
 
 end
-Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Alias', 'bool:?') -- Edit this according to this function
+Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Image,object:?*:Transform', 'bool:?') -- Edit this according to this function
 
 -- Function to use transformation data on presaved image
+---@param trans Transform Transformation to transform image
 local function handleOnNewTransformationProcessing(trans)
   handleOnNewProcessing(nil, trans)
+end
+
+-- Function to use transformation data on presaved image to crop image
+---@param trans Transform Transformation to use for cropping image
+local function handleOnNewCropProcessing(trans)
+  handleOnNewProcessing(nil, trans)
+end
+
+--- Function only used to forward the content from events to the served function.
+--- This is only needed, as deregistering from the event would internally release the served function and would make it uncallable from external.
+---@param image Image Image to process
+local function tempHandleOnNewProcessing(image)
+  handleOnNewProcessing(image)
 end
 
 --- Function to handle updates of processing parameters from Controller
@@ -108,26 +194,26 @@ local function handleOnNewProcessingParameter(multiImageFilterNo, parameter, val
     if parameter == 'registeredEvent' then
       _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on event " .. value)
       if processingParams.registeredEvent ~= '' then
-        Script.deregister(processingParams.registeredEvent, handleOnNewProcessing)
+        Script.deregister(processingParams.registeredEvent, tempHandleOnNewProcessing)
       end
       processingParams.registeredEvent = value
-      Script.register(value, handleOnNewProcessing)
+      Script.register(value, tempHandleOnNewProcessing)
 
     elseif parameter == 'deregisterFromEvent' then
       _G.logger:fine(nameOfModule .. ": Deregister instance " .. multiImageFilterInstanceNumberString .. " from event")
-      Script.deregister(processingParams.registeredEvent, handleOnNewProcessing)
+      Script.deregister(processingParams.registeredEvent, tempHandleOnNewProcessing)
       processingParams.registeredEvent = ''
 
     elseif parameter == 'registeredTransformationEvent' then
+      if processingParams.registeredTransformationEvent ~= '' then
+        Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
+      end
+      processingParams.registeredTransformationEvent = value
       if processingParams.transformationSource == 'EXTERNAL' then
         _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on transformation event " .. value)
-        if processingParams.registeredTransformationEvent ~= '' then
-          Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
-        end
-        processingParams.registeredTransformationEvent = value
         Script.register(value, handleOnNewTransformationProcessing)
       else
-        _G.logger:fine(nameOfModule .. ": First set transformation source to 'EXTERNAL'.")
+        _G.logger:info(nameOfModule .. ": First set transformation source to 'EXTERNAL'.")
       end
 
     elseif parameter == 'transformationSource' then
@@ -141,6 +227,30 @@ local function handleOnNewProcessingParameter(multiImageFilterNo, parameter, val
       elseif value == 'MANUAL' then
         Script.deregister(processingParams.registeredTransformationEvent, handleOnNewTransformationProcessing)
       end
+
+      elseif parameter == 'registeredCropPositionEvent' then
+        if processingParams.cropPositionSource == 'EXTERNAL' then
+          _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on crop event " .. value)
+          if processingParams.registeredCropPositionEvent ~= '' then
+            Script.deregister(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+          end
+          processingParams.registeredCropPositionEvent = value
+          Script.register(value, handleOnNewCropProcessing)
+        else
+          _G.logger:fine(nameOfModule .. ": First set crop source to 'EXTERNAL'.")
+        end
+
+      elseif parameter == 'cropPositionSource' then
+        processingParams[parameter] = value
+        if value == 'EXTERNAL' then
+          if processingParams.registeredCropPositionEvent ~= '' then
+            Script.deregister(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+            _G.logger:fine(nameOfModule .. ": Register instance " .. multiImageFilterInstanceNumberString .. " on crop event " .. tostring(processingParams.registeredCropPositionEvent))
+            Script.register(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+          end
+        elseif value == 'MANUAL' then
+          Script.deregister(processingParams.registeredCropPositionEvent, handleOnNewCropProcessing)
+        end
 
     elseif parameter == 'transX' or parameter == 'transY' or parameter == 'transAngle' or parameter =='transAngleOriginX' or parameter == 'transAngleOriginY' then
       processingParams[parameter] = value

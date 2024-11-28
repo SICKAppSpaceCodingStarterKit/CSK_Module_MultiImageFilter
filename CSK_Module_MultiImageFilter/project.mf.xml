@@ -25,6 +25,7 @@ INFO: It is possible to combine multiple filters / instances by adding instances
                 <item desc="Blur filter." name="Blur">Blur</item>
                 <item desc="Crop image." name="Crop">Crop</item>
                 <item desc="Transform image." name="Transform">Transform</item>
+                <item desc="Convert RGB image to Lab channels." name="Lab">Lab</item>
             </enum>
             <enum name="TransformationSource" trait="released">
                 <desc>Source for transformation data.</desc>
@@ -142,6 +143,10 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
                     <desc>Notify height of cropped image.</desc>
                     <param desc="The height of the cropped image." multiplicity="1" name="height" type="int"/>
                 </event>
+                <event name="OnNewStatusFlowConfigPriority">
+                    <desc>Notify if FlowConfig should have priority for FlowConfig relevant configurations.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
                 <event name="OnNewStatusRegisteredTransformationEvent">
                     <desc>Notify event to receive transformation data to align image.</desc>
                     <param desc="Name of event." multiplicity="1" name="eventName" type="string"/>
@@ -170,15 +175,41 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
                     <desc>Notify transformation angle origin y position.</desc>
                     <param desc="y position" multiplicity="1" name="yPos" type="int"/>
                 </event>
+                <event name="OnNewStatusCSKStyle">
+                    <desc>Notify UI style to use for CSK modules.</desc>
+                    <param desc="UI style" multiplicity="1" name="theme" type="string"/>
+                </event>
+                <event name="OnNewStatusModuleVersion">
+                    <desc>Notify version of module.</desc>
+                    <param desc="Version" multiplicity="1" name="version" type="string"/>
+                </event>
+                <event name="OnNewStatusModuleIsActive">
+                    <desc>Notify if module can be used on device.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </event>
+                <event name="OnNewStatusCropPositionSource">
+                    <desc>Notify source for crop position.</desc>
+                    <param desc="Source" multiplicity="1" name="source" type="string"/>
+                </event>
+                <event name="OnNewStatusRegisteredCropPositionEvent">
+                    <desc>Notify event to receive transformation data to crop specific part in image.</desc>
+                    <param desc="Name of event." multiplicity="1" name="eventName" type="string"/>
+                </event>
+                <event name="OnNewStatusUIMessage">
+                    <desc>Notfiy message to show in UI.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="string"/>
+                </event>
+                <event name="OnNewStatusLabChannel">
+                    <desc>Notify channel to use of Lab image.</desc>
+                    <param desc="Channel" multiplicity="1" name="channel" type="string"/>
+                </event>
                 <function name="setParameterName">
                     <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
                     <param desc="Name of the parameter" multiplicity="1" name="name" type="string"/>
                 </function>
                 <function name="sendParameters">
                     <desc>Send parameters to CSK_PersistentData module if possible to save them.</desc>
-                </function>
-                <function name="loadParameters">
-                    <desc>Load parameters for this module from the CSK_PersistentData module if possible and use them.</desc>
+                    <param desc="[Optional] Set to TRUE if the data should NOT be saved immediately after sending." multiplicity="?" name="noDataSave" type="bool"/>
                 </function>
                 <function name="setLoadOnReboot">
                     <desc>Configure if this module should load its saved parameters at app/ device boot up.</desc>
@@ -206,8 +237,8 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
 NUM will be replaced by the number of instance (e.g. "processInstance1"). +
 INFO: Other modules can check via "Script.isServedAsFunction" if function of sepecific instance exists. +
 Needs then to be called via "Script.callFunction".</desc>
-                    <param alias="Alias" desc="Transferred object (optional)" multiplicity="?" name="object" type="object"/>
-                    <param alias="Container" desc="Optional transformation data (xTrans, yTrans)" multiplicity="?" name="translation" type="object"/>
+                    <param alias="Image" desc="Image to process" multiplicity="?" name="image" type="object"/>
+                    <param alias="Transform" desc="Optional transformation data (xTrans, yTrans)" multiplicity="[?*]" name="translation" type="object"/>
                     <return desc="Processing result (optional)." multiplicity="?" name="result" type="bool"/>
                 </function>
                 <function name="addInstance">
@@ -249,6 +280,13 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                     <desc>Function to set height of cropped image.</desc>
                     <param desc="The height of the cropped image." multiplicity="1" name="height" type="int"/>
                 </function>
+                <function name="clearFlowConfigRelevantConfiguration">
+                    <desc>Function to clear FlowConfig relevant configurations.</desc>
+                </function>
+                <function name="setFlowConfigPriority">
+                    <desc>Function to configure if FlowConfig should have priority for FlowConfig relevant configuration.</desc>
+                    <param desc="Status" multiplicity="1" name="status" type="bool"/>
+                </function>
                 <function name="setRegisterTransformationEvent">
                     <desc>Function to set event to receive transformation data to align image.</desc>
                     <param desc="Event (needs to provide translation data as 'Transform' object)." multiplicity="1" name="event" type="string"/>
@@ -277,10 +315,105 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                     <desc>Function to set yPos of origin for manual angle transformation.</desc>
                     <param desc="y position" multiplicity="1" name="yPos" type="int"/>
                 </function>
+                <function name="getStatusModuleActive">
+                    <desc>Function to get status if module is active.</desc>
+                    <return desc="Status" multiplicity="1" name="status" type="bool"/>
+                </function>
+                <function name="setCropPositionSource">
+                    <desc>Function to set source of crop position.</desc>
+                    <param desc="Source (MANUAL or EXTERNAL)" multiplicity="1" name="source" type="string"/>
+                </function>
+                <function name="setRegisterCropPositionEvent">
+                    <desc>Function to set event to receive transformation position data to crop image.</desc>
+                    <param desc="Event (needs to provide translation data as 'Transform' object)." multiplicity="1" name="event" type="string"/>
+                </function>
+                <function name="loadParameters">
+                    <desc>Load parameters for this module from the CSK_PersistentData module if possible and use them.</desc>
+                    <return desc="Success to load parameters." multiplicity="1" name="success" type="bool"/>
+                </function>
+                <function name="getParameters">
+                    <trait>released</trait>
+                    <desc>Function to get all parameters of the client in JSON format.</desc>
+                    <param desc="Number of instance to get parameters from." multiplicity="1" name="instanceNo" type="int"/>
+                    <return desc="JSON string with all parameters." multiplicity="1" name="jsonParameters" type="string"/>
+                </function>
+                <function name="resetModule">
+                    <desc>Function to reset main configuration of module.</desc>
+                </function>
+                <function name="setLabChannel">
+                    <desc>Function to set which channel to use of Lab image.</desc>
+                    <param desc="Channel (L, a or b)" multiplicity="1" name="channel" type="string"/>
+                </function>
             </serves>
         </crown>
+        <crown name="MultiImageFilter_FC">
+            <trait>released</trait>
+            <desc>Crown to provide CSK_FlowConfig relevant features.</desc>
+            <serves/>
+            <crown name="ImageSource">
+                <desc>Set source of images to process.</desc>
+                <serves>
+                    <function name="create">
+                        <desc>Internally used CSK_FlowConfig create function.</desc>
+                        <param constraint="1-99" desc="Numeric identifier of processing instance." multiplicity="1" name="Instance" type="int"/>
+                        <return desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                    </function>
+                    <function name="imageSource">
+                        <include>data-flow</include>
+                        <desc>Set source of images to process.</desc>
+                        <param desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                        <param desc="Set source of images to process.&#10;&#10;Parameter:&#10;1: image (IMAGE)" multiplicity="1" name="imageSource" type="string"/>
+                        <param desc="(optional) Set source of transformation to use on image.&#10;&#10;Parameter:&#10;1: transformation (TRANSFORM)" multiplicity="?" name="transformationSource" type="string"/>
+                    </function>
+                </serves>
+            </crown>
+            <crown name="OnNewImage">
+                <trait>released</trait>
+                <desc>Provide filtered image.</desc>
+                <serves>
+                    <event name="OnNewImage">
+                        <include>data-flow</include>
+                        <desc>Provide filtered image.</desc>
+                        <param desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                        <param desc="'CSK_MultiImageFilter.OnNewImage[InstanceNUM]'&#10;&#10;Parameter:&#10;1: (optional) filterd image (IMAGE)" multiplicity="1" name="OnNewImage" ref="CSK_MultiColorSelection_FC.ResultType" type="string"/>
+                    </event>
+                    <function name="create">
+                        <trait>released</trait>
+                        <desc>Internally used CSK_FlowConfig create function.</desc>
+                        <param constraint="1-99" desc="Numeric identifier of processing instance." multiplicity="1" name="Instance" type="int"/>
+                        <return desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                    </function>
+                    <function name="register">
+                        <trait>released</trait>
+                        <desc>Internally used CSK_FlowConfig register function.</desc>
+                        <param desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                        <param desc="Internal parameter (not used)." multiplicity="1" name="eventname" type="string"/>
+                        <param desc="Internally used callback function." multiplicity="1" name="callback" type="string"/>
+                        <return desc="Success of register process." multiplicity="1" name="success" type="bool"/>
+                    </function>
+                </serves>
+            </crown>
+            <crown name="Process">
+                <desc>Set source of images to filter and provide filtered images.</desc>
+                <serves>
+                    <function name="create">
+                        <desc>Internally used CSK_FlowConfig create function.</desc>
+                        <param constraint="1-99" desc="Number of processing instance." multiplicity="1" name="Instance" type="int"/>
+                        <return desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                    </function>
+                    <function name="process">
+                        <include>data-flow</include>
+                        <desc>Set source event of incoming images and provide result image event.</desc>
+                        <param desc="Handle to internally used FlowConfig instance." multiplicity="1" name="handle" type="handle"/>
+                        <param desc="Set source of images to process.&#10;&#10;Parameter:&#10;1: image (IMAGE)" multiplicity="1" name="imageSource" type="string"/>
+                        <param desc="(optional) Set source of transformation to use on image.&#10;&#10;Parameter:&#10;1: transformation (TRANSFORM)" multiplicity="?" name="transformationSource" type="string"/>
+                        <return desc="'CSK_MultiImageFilter.OnNewImage[InstanceNUM]'&#10;&#10;Parameter:&#10;1: (optional) filterd image (IMAGE)" multiplicity="1" name="OnNewImage" type="string"/>
+                    </function>
+                </serves>
+            </crown>
+        </crown>
         <meta key="author">SICK AG</meta>
-        <meta key="version">1.0.0</meta>
+        <meta key="version">2.0.0</meta>
         <meta key="priority">low</meta>
         <meta key="copy-protected">false</meta>
         <meta key="read-protected">false</meta>
