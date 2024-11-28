@@ -25,6 +25,7 @@ INFO: It is possible to combine multiple filters / instances by adding instances
                 <item desc="Blur filter." name="Blur">Blur</item>
                 <item desc="Crop image." name="Crop">Crop</item>
                 <item desc="Transform image." name="Transform">Transform</item>
+                <item desc="Convert RGB image to Lab channels." name="Lab">Lab</item>
             </enum>
             <enum name="TransformationSource" trait="released">
                 <desc>Source for transformation data.</desc>
@@ -198,6 +199,10 @@ NUM will be replaced by the number of instance (e.g. "OnNewResult1"). +</desc>
                     <desc>Notfiy message to show in UI.</desc>
                     <param desc="Status" multiplicity="1" name="status" type="string"/>
                 </event>
+                <event name="OnNewStatusLabChannel">
+                    <desc>Notify channel to use of Lab image.</desc>
+                    <param desc="Channel" multiplicity="1" name="channel" type="string"/>
+                </event>
                 <function name="setParameterName">
                     <desc>Function to set the name of the parameters if saved/loaded via the CSK_PersistentData module.</desc>
                     <param desc="Name of the parameter" multiplicity="1" name="name" type="string"/>
@@ -334,6 +339,10 @@ IMPORTANT: As instances start their own threads, the module needs to be restarte
                 </function>
                 <function name="resetModule">
                     <desc>Function to reset main configuration of module.</desc>
+                </function>
+                <function name="setLabChannel">
+                    <desc>Function to set which channel to use of Lab image.</desc>
+                    <param desc="Channel (L, a or b)" multiplicity="1" name="channel" type="string"/>
                 </function>
             </serves>
         </crown>

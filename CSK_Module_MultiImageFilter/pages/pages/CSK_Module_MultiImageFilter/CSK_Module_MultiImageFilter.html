@@ -339,6 +339,9 @@
                                                                     <davinci-option id="Option_Gray" value="Gray">
                                                                         <span>Gray</span>
                                                                     </davinci-option>
+                                                                    <davinci-option id="Option_Lab" value="Lab">
+                                                                        <span>Lab</span>
+                                                                    </davinci-option>
                                                                     <davinci-option id="Option_Transfrom"
                                                                         value="Transform">
                                                                         <span>Transform</span>
@@ -356,6 +359,36 @@
                                                         </layout-row>
                                                         <stacked-view id="SV_FilterType">
                                                             <stacked-pane id="SP_Gray" value="Gray"></stacked-pane>
+                                                            <stacked-pane id="SP_Lab" value="Lab">
+                                                                <layout-row id="RowLayout11">
+                                                                    <layout-column id="ColumnLayout11"
+                                                                        style="align-items: stretch">
+                                                                        <davinci-drop-down id="DD_LabChannel"
+                                                                            title="Set channel to use of Lab color space.">
+                                                                            <davinci-option id="Option_L" value="L">
+                                                                                <span>L</span>
+                                                                            </davinci-option>
+                                                                            <davinci-option id="Option_a" value="a">
+                                                                                <span>a</span>
+                                                                            </davinci-option>
+                                                                            <davinci-option id="Option_b" value="b">
+                                                                                <span>b</span>
+                                                                            </davinci-option>
+                                                                            <crown-edpws-binding property="value"
+                                                                                name="CSK_MultiImageFilter/OnNewStatusLabChannel"
+                                                                                update-on-resume>
+                                                                            </crown-edpws-binding>
+                                                                            <crown-binding event="change"
+                                                                                name="CSK_MultiImageFilter/setLabChannel"
+                                                                                path="param/args/channel" auto-commit>
+                                                                            </crown-binding>
+                                                                        </davinci-drop-down>
+                                                                        <layout-row id="RowLayout12"
+                                                                            class="myCustomSpacerVert10_CSK_Module_MultiImageFilter">
+                                                                        </layout-row>
+                                                                    </layout-column>
+                                                                </layout-row>
+                                                            </stacked-pane>
                                                             <stacked-pane id="SP_Crop" value="Crop">
                                                                 <layout-row id="RowLayout14">
                                                                     <layout-column id="ColumnLayout13"

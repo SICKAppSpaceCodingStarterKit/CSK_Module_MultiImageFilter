@@ -32,6 +32,8 @@ processingParams.filterType = scriptParams:get('filterType')
 
 processingParams.blurKernelSizePix = scriptParams:get('blurKernelSizePix')
 
+processingParams.labChannel = scriptParams:get('labChannel')
+
 processingParams.cannyThresholdLow = scriptParams:get('cannyThresholdLow')
 processingParams.cannyThresholdHigh = scriptParams:get('cannyThresholdHigh')
 
@@ -60,6 +62,22 @@ local function handleOnNewProcessing(img, translation)
 
   if processingParams.filterType == 'Gray' then
     resultImage = Image.toGray(img)
+  elseif processingParams.filterType == 'Lab' then
+    local imgType = Image.getType(img)
+    if imgType == 'RGB24' then
+      if processingParams.labChannel == 'L' then
+        resultImage = Image.toLab(img)
+      elseif processingParams.labChannel == 'a' then
+        _, resultImage = Image.toLab(img)
+      elseif processingParams.labChannel == 'b' then
+        _, __, resultImage = Image.toLab(img)
+      end
+    else
+      _G.logger:warning(nameOfModule .. ": Lab conversion on instance No." .. multiImageFilterInstanceNumberString .. " not possible. No RGB image.")
+      if processingParams.activeInUI then
+        Script.notifyEvent("MultiImageFilter_OnNewValueToForward" .. multiImageFilterInstanceNumberString, "MultiImageFilter_OnNewStatusUIMessage", 'LOG')
+      end
+    end
   elseif processingParams.filterType == 'Canny' then
     local imgType = Image.getType(img)
     if imgType == 'UINT8' then
@@ -145,13 +163,13 @@ end
 Script.serveFunction("CSK_MultiImageFilter.processInstance"..multiImageFilterInstanceNumberString, handleOnNewProcessing, 'object:?:Image,object:?*:Transform', 'bool:?') -- Edit this according to this function
 
 -- Function to use transformation data on presaved image
----@param trans Transfrom Transformation to transform image
+---@param trans Transform Transformation to transform image
 local function handleOnNewTransformationProcessing(trans)
   handleOnNewProcessing(nil, trans)
 end
 
 -- Function to use transformation data on presaved image to crop image
----@param trans Transfrom Transformation to use for cropping image
+---@param trans Transform Transformation to use for cropping image
 local function handleOnNewCropProcessing(trans)
   handleOnNewProcessing(nil, trans)
 end

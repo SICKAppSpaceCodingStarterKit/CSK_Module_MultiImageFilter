@@ -62,6 +62,8 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.parameters.processingFile = 'CSK_MultiImageFilter_Processing' -- which file to use for processing (will be started in own thread)
   self.parameters.filterType = 'Gray' -- Type of filter to use
 
+  self.parameters.labChannel = 'L' -- Channel to use if images was converted to Lab channels, 'L', 'a' or 'b'
+
   self.parameters.cannyThresholdHigh = 255 --100 -- First/high threshold to find strong edges
   self.parameters.cannyThresholdLow = 10 --50 -- Second/low threshold for finding weaker edges connected with the strong edges
 
@@ -93,6 +95,8 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
   self.multiImageFilterProcessingParams:add('viewerId', 'multiImageFilterViewer' .. self.multiImageFilterInstanceNoString, "STRING")
 
   self.multiImageFilterProcessingParams:add('filterType', self.parameters.filterType, "STRING")
+
+  self.multiImageFilterProcessingParams:add('labChannel', self.parameters.labChannel, "STRING")
 
   self.multiImageFilterProcessingParams:add('blurKernelSizePix', self.parameters.blurKernelSizePix, "INT")
 

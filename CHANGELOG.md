@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## Release 2.0.0
 
 ### New features
+- New filter to convert RGB to Lab channels
 - Supports FlowConfig feature to set images / transformation to process / provide processed image
 - Position to crop image can be received by external event
 - Provide version of module via 'OnNewStatusModuleVersion'

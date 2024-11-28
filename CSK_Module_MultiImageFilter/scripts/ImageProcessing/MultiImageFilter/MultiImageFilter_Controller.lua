@@ -61,6 +61,8 @@ Script.serveEvent('CSK_MultiImageFilter.OnNewStatusImageFilterType', 'MultiImage
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusBlurKernelSizePix', 'MultiImageFilter_OnNewStatusBlurKernelSizePix')
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCannyThresholds', 'MultiImageFilter_OnNewStatusCannyThresholds')
 
+Script.serveEvent('CSK_MultiImageFilter.OnNewStatusLabChannel', 'MultiImageFilter_OnNewStatusLabChannel')
+
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropPositionSource', 'MultiImageFilter_OnNewStatusCropPositionSource')
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropPosX', 'MultiImageFilter_OnNewStatusCropPosX')
 Script.serveEvent('CSK_MultiImageFilter.OnNewStatusCropPosY', 'MultiImageFilter_OnNewStatusCropPosY')
@@ -221,6 +223,7 @@ local function handleOnExpiredTmrMultiImageFilter()
     Script.notifyEvent('MultiImageFilter_OnNewStatusImageFilterType', multiImageFilter_Instances[selectedInstance].parameters.filterType)
     Script.notifyEvent('MultiImageFilter_OnNewStatusBlurKernelSizePix', multiImageFilter_Instances[selectedInstance].parameters.blurKernelSizePix)
     Script.notifyEvent('MultiImageFilter_OnNewStatusCannyThresholds', {multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdLow, multiImageFilter_Instances[selectedInstance].parameters.cannyThresholdHigh})
+    Script.notifyEvent('MultiImageFilter_OnNewStatusLabChannel', multiImageFilter_Instances[selectedInstance].parameters.labChannel)
 
     Script.notifyEvent('MultiImageFilter_OnNewStatusCropPositionSource', multiImageFilter_Instances[selectedInstance].parameters.cropPositionSource)
     Script.notifyEvent('MultiImageFilter_OnNewStatusCropPosX', multiImageFilter_Instances[selectedInstance].parameters.cropPosX)
@@ -342,6 +345,8 @@ local function updateProcessingParameters()
   Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'transAngleOriginY', multiImageFilter_Instances[selectedInstance].parameters.transAngleOriginY)
   Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'registeredTransformationEvent', multiImageFilter_Instances[selectedInstance].parameters.registeredTransformationEvent)
 
+  Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'labChannel', multiImageFilter_Instances[selectedInstance].parameters.labChannel)
+
   Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'registeredEvent', multiImageFilter_Instances[selectedInstance].parameters.registeredEvent)
 
 end
@@ -352,6 +357,16 @@ local function setFilterType(filterType)
   handleOnExpiredTmrMultiImageFilter()
 end
 Script.serveFunction('CSK_MultiImageFilter.setFilterType', setFilterType)
+
+local function setLabChannel(channel)
+  if channel == 'L' or channel == 'a' or channel == 'b' then
+    multiImageFilter_Instances[selectedInstance].parameters.labChannel = channel
+    Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', selectedInstance, 'labChannel', channel)
+  else
+    _G.logger:warning(nameOfModule .. ": Channel " .. tostring(channel) .. " not available.")
+  end
+end
+Script.serveFunction('CSK_MultiImageFilter.setLabChannel', setLabChannel)
 
 local function setBlurKernelSizePix(kernelSize)
   multiImageFilter_Instances[selectedInstance].parameters.blurKernelSizePix = kernelSize
