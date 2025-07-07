@@ -471,9 +471,11 @@ Script.serveFunction('CSK_MultiImageFilter.getStatusModuleActive', getStatusModu
 
 local function clearFlowConfigRelevantConfiguration()
   for i = 1, #multiImageFilter_Instances do
-    multiImageFilter_Instances[i].parameters.registeredEvent = ''
-    Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', i, 'deregisterFromEvent', '')
-    Script.notifyEvent('MultiImageFilter_OnNewStatusRegisteredEvent', '')
+    if multiImageFilter_Instances[i].parameters.flowConfigPriority then
+      multiImageFilter_Instances[i].parameters.registeredEvent = ''
+      Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', i, 'deregisterFromEvent', '')
+      Script.notifyEvent('MultiImageFilter_OnNewStatusRegisteredEvent', '')
+    end
   end
 end
 Script.serveFunction('CSK_MultiImageFilter.clearFlowConfigRelevantConfiguration', clearFlowConfigRelevantConfiguration)
@@ -523,6 +525,8 @@ local function loadParameters()
     if data then
       _G.logger:info(nameOfModule .. ": Loaded parameters for multiImageFilterObject " .. tostring(selectedInstance) .. " from CSK_PersistentData module.")
       multiImageFilter_Instances[selectedInstance].parameters = helperFuncs.convertContainer2Table(data)
+
+      multiImageFilter_Instances[selectedInstance].parameters = helperFuncs.checkParameters(multiImageFilter_Instances[selectedInstance].parameters, helperFuncs.defaultParameters.getParameters())
 
       -- If something needs to be configured/activated with new loaded data
       updateProcessingParameters()
@@ -606,7 +610,11 @@ Script.register("CSK_PersistentData.OnInitialDataLoaded", handleOnInitialDataLoa
 
 local function resetModule()
   if _G.availableAPIs.default and _G.availableAPIs.specific then
-    clearFlowConfigRelevantConfiguration()
+    for i = 1, #multiImageFilter_Instances do
+      multiImageFilter_Instances[i].parameters.registeredEvent = ''
+      Script.notifyEvent('MultiImageFilter_OnNewProcessingParameter', i, 'deregisterFromEvent', '')
+      Script.notifyEvent('MultiImageFilter_OnNewStatusRegisteredEvent', '')
+    end
     pageCalled()
   end
 end

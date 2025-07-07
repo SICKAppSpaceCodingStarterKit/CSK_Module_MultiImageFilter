@@ -50,10 +50,9 @@ local multiImageFilter_Instances = {} -- Handle all instances
 local multiImageFilterController = require('ImageProcessing/MultiImageFilter/MultiImageFilter_Controller')
 
 if _G.availableAPIs.default and _G.availableAPIs.specific then
-  local setInstanceHandle = require('ImageProcessing/MultiImageFilter/FlowConfig/MultiImageFilter_FlowConfig')
+  require('ImageProcessing/MultiImageFilter/FlowConfig/MultiImageFilter_FlowConfig')
   table.insert(multiImageFilter_Instances, multiImageFilter_Model.create(1)) -- Create at least 1 instance
   multiImageFilterController.setMultiImageFilter_Instances_Handle(multiImageFilter_Instances) -- share handle of instances
-  setInstanceHandle(multiImageFilter_Instances)
 else
   _G.logger:warning("CSK_MultiImageFilter: Relevant CROWN(s) not available on device. Module is not supported...")
 end
