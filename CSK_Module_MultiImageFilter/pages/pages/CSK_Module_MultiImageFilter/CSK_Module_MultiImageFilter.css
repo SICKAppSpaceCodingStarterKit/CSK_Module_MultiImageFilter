@@ -1,6 +1,7 @@
-.myViewer_CSK_Module_MultiImageFilter > div > div {
-  max-height: 600px;
-  min-height: 600px;
+.myViewer_CSK_Module_MultiImageFilter {
+  width: 98%;
+  height: 600px;
+  margin: auto;
 }
 
 .myCustomSpacerVert10_CSK_Module_MultiImageFilter {
@@ -105,5 +106,5 @@
 
 .myCustomButton_CSK_Module_MultiImageFilter {
   border-radius: 30px;
-  padding-right: 0px;
+  padding: 11px;
 }

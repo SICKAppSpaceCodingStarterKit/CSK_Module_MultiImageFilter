@@ -57,34 +57,7 @@ function multiImageFilter.create(multiImageFilterInstanceNo)
 
   -- Parameters to be saved permanently if wanted
   self.parameters = {}
-  self.parameters.flowConfigPriority = CSK_FlowConfig ~= nil or false -- Status if FlowConfig should have priority for FlowConfig relevant configurations
-  self.parameters.registeredEvent = '' -- If thread internal function should react on external event, define it here, e.g. 'CSK_OtherModule.OnNewInput'
-  self.parameters.processingFile = 'CSK_MultiImageFilter_Processing' -- which file to use for processing (will be started in own thread)
-  self.parameters.filterType = 'Gray' -- Type of filter to use
-
-  self.parameters.labChannel = 'L' -- Channel to use if images was converted to Lab channels, 'L', 'a' or 'b'
-
-  self.parameters.cannyThresholdHigh = 255 --100 -- First/high threshold to find strong edges
-  self.parameters.cannyThresholdLow = 10 --50 -- Second/low threshold for finding weaker edges connected with the strong edges
-
-  self.parameters.blurKernelSizePix = 15 -- Size of the kernel
-
-  self.parameters.cropPositionSource = 'MANUAL' -- 'MANUAL' or 'EXTERNAL' source for cropping
-  self.parameters.cropPosX = 267 -- The x position of the top-left corner of the cropped image in the source image (MANUAL MODE)
-  self.parameters.cropPosY = 200 -- The y position of the top-left corner of the cropped image in the source image (MANUAL MODE)
-  self.parameters.cropWidth = 150 -- The width of the cropped image
-  self.parameters.cropHeight = 80 -- The height  of the cropped image
-  self.parameters.registeredCropPositionEvent = '' -- If thread internal function should react on external transformation event, define it here, e.g. 'CSK_OtherModule.OnNewTransformation'
-
-  self.parameters.transformationSource = 'MANUAL' -- 'MANUAL' or 'EXTERNAL' source for transformation
-  self.parameters.transX = 0 -- Manual transformation in x direction
-  self.parameters.transY = 0 -- Manual transformation in y direction
-  self.parameters.transAngle = 0 -- Manual angle transformation
-  self.parameters.transAngleOriginX = 0 -- X origin for manual angle transformation
-  self.parameters.transAngleOriginY = 0 -- Y origin for manual angle transformation
-  self.parameters.registeredTransformationEvent = '' -- If thread internal function should react on external transformation event, define it here, e.g. 'CSK_OtherModule.OnNewTransformation'
-
-  self.parameters.showImage = false -- Show image in UI
+  self.parameters = self.helperFuncs.defaultParameters.getParameters() -- Load default parameters
 
   -- Parameters to give to the processing script
   self.multiImageFilterProcessingParams = Container.create()
